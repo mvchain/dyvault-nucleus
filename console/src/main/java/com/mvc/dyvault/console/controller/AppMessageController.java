@@ -38,20 +38,4 @@ public class AppMessageController extends BaseController {
         return new Result<>(new PageInfo<>(message));
     }
 
-    /**
-     * TODO 添加到低优先级消息队列
-     *
-     * @param userId
-     * @param id
-     * @return
-     */
-    @PutMapping("{id}")
-    public Result<Boolean> updateRead(@RequestParam("userId") BigInteger userId, @PathVariable("id") BigInteger id) {
-        AppMessage message = new AppMessage();
-        message.setUserId(userId);
-        message.setId(id);
-        message.setIsRead(1);
-        appMessageService.update(message);
-        return new Result<>(true);
-    }
 }

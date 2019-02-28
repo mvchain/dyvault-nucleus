@@ -1,6 +1,5 @@
 package com.mvc.dyvault.common.util;
 
-import org.mybatis.generator.api.CommentGenerator;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
@@ -21,7 +20,6 @@ import static org.mybatis.generator.internal.util.StringUtility.isTrue;
  * mybatis generator 自定义comment生成器.
  *
  * @author yihui
- *
  */
 public class MyCommentGenerator extends DefaultCommentGenerator {// implements
     // CommentGenerator
@@ -42,6 +40,7 @@ public class MyCommentGenerator extends DefaultCommentGenerator {// implements
         currentDateStr = (new SimpleDateFormat("yyyy-MM-dd")).format(new Date());
     }
 
+    @Override
     public void addJavaFileComment(CompilationUnit compilationUnit) {
         // add no file level comments by default
         return;
@@ -51,15 +50,18 @@ public class MyCommentGenerator extends DefaultCommentGenerator {// implements
      * Adds a suitable comment to warn users that the element was generated, and
      * when it was generated.
      */
+    @Override
     public void addComment(XmlElement xmlElement) {
         return;
     }
 
+    @Override
     public void addRootComment(XmlElement rootElement) {
         // add no document level comments by default
         return;
     }
 
+    @Override
     public void addConfigurationProperties(Properties properties) {
         this.properties.putAll(properties);
 
@@ -74,9 +76,9 @@ public class MyCommentGenerator extends DefaultCommentGenerator {// implements
      * Javadoc tag then the Java merge capability of the eclipse plugin will
      * break.
      *
-     * @param javaElement
-     *            the java element
+     * @param javaElement the java element
      */
+    @Override
     protected void addJavadocTag(JavaElement javaElement, boolean markAsDoNotDelete) {
         javaElement.addJavaDocLine(" *");
         StringBuilder sb = new StringBuilder();
@@ -100,6 +102,7 @@ public class MyCommentGenerator extends DefaultCommentGenerator {// implements
      *
      * @return a string representing the current timestamp, or null
      */
+    @Override
     protected String getDateString() {
         String result = null;
         if (!suppressDate) {
@@ -108,6 +111,7 @@ public class MyCommentGenerator extends DefaultCommentGenerator {// implements
         return result;
     }
 
+    @Override
     public void addClassComment(InnerClass innerClass, IntrospectedTable introspectedTable) {
         if (suppressAllComments) {
             return;
@@ -122,6 +126,7 @@ public class MyCommentGenerator extends DefaultCommentGenerator {// implements
         innerClass.addJavaDocLine(" */");
     }
 
+    @Override
     public void addEnumComment(InnerEnum innerEnum, IntrospectedTable introspectedTable) {
         if (suppressAllComments) {
             return;
@@ -137,6 +142,7 @@ public class MyCommentGenerator extends DefaultCommentGenerator {// implements
         innerEnum.addJavaDocLine(" */");
     }
 
+    @Override
     public void addFieldComment(Field field, IntrospectedTable introspectedTable,
                                 IntrospectedColumn introspectedColumn) {
         if (suppressAllComments) {
@@ -172,6 +178,7 @@ public class MyCommentGenerator extends DefaultCommentGenerator {// implements
         field.addAnnotation("@Column(name = \"" + introspectedColumn.getActualColumnName() + "\")");
     }
 
+    @Override
     public void addFieldComment(Field field, IntrospectedTable introspectedTable) {
         if (suppressAllComments) {
             return;
@@ -186,6 +193,7 @@ public class MyCommentGenerator extends DefaultCommentGenerator {// implements
         field.addJavaDocLine(" */");
     }
 
+    @Override
     public void addGeneralMethodComment(Method method, IntrospectedTable introspectedTable) {
         if (suppressAllComments) {
             return;
@@ -195,6 +203,7 @@ public class MyCommentGenerator extends DefaultCommentGenerator {// implements
         // method.addJavaDocLine(" */");
     }
 
+    @Override
     public void addGetterComment(Method method, IntrospectedTable introspectedTable,
                                  IntrospectedColumn introspectedColumn) {
         if (suppressAllComments) {
@@ -220,6 +229,7 @@ public class MyCommentGenerator extends DefaultCommentGenerator {// implements
         method.addJavaDocLine(" */");
     }
 
+    @Override
     public void addSetterComment(Method method, IntrospectedTable introspectedTable,
                                  IntrospectedColumn introspectedColumn) {
         if (suppressAllComments) {
@@ -246,6 +256,7 @@ public class MyCommentGenerator extends DefaultCommentGenerator {// implements
     }
 
     @Deprecated
+    @Override
     public void addClassComment(InnerClass innerClass, IntrospectedTable introspectedTable, boolean markAsDoNotDelete) {
 
     }
@@ -282,10 +293,11 @@ public class MyCommentGenerator extends DefaultCommentGenerator {// implements
 
     // 首字母转小写
     public static String toLowerCaseFirstOne(String s) {
-        if (Character.isLowerCase(s.charAt(0)))
+        if (Character.isLowerCase(s.charAt(0))) {
             return s;
-        else
+        } else {
             return (new StringBuilder()).append(Character.toLowerCase(s.charAt(0))).append(s.substring(1)).toString();
+        }
     }
 
     public void addGeneralMethodAnnotation(Method method, IntrospectedTable introspectedTable,

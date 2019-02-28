@@ -15,7 +15,7 @@ public class AppUserMailDTO {
     @ApiModelProperty("邮箱")
     private String email;
     @ApiModelProperty("验证码")
-    private String valiCode;
+    private String validCode;
     @ApiModelProperty("临时令牌")
     private String token;
 

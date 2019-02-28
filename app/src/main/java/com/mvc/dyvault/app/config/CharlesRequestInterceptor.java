@@ -17,7 +17,7 @@ public class CharlesRequestInterceptor implements RequestInterceptor {
     @Override
     public void apply(RequestTemplate template) {
         // feign 不支持 GET 方法传 POJO, json body转query
-        if (template.method().equals("GET") && template.body() != null) {
+        if ("GET".equals(template.method()) && template.body() != null) {
             try {
                 JsonNode jsonNode = objectMapper.readTree(template.body());
                 template.body(null);

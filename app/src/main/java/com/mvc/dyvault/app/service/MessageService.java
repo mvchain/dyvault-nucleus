@@ -19,8 +19,8 @@ public class MessageService {
     @Autowired
     ConsoleRemoteService messageRemoteService;
 
-    public List<MessageVO> getlist(BigInteger userId, BigInteger timestamp, Integer type, Integer pageSize) {
-        Result<PageInfo<AppMessage>> listData = messageRemoteService.getlist(userId, timestamp, type, pageSize);
+    public List<MessageVO> getlist(BigInteger userId, BigInteger timestamp, Integer pageSize) {
+        Result<PageInfo<AppMessage>> listData = messageRemoteService.getlist(userId, timestamp, pageSize);
         List<MessageVO> result = new ArrayList<>(listData.getData().getList().size());
         for (AppMessage message : listData.getData().getList()) {
             MessageVO vo = new MessageVO();
@@ -33,8 +33,4 @@ public class MessageService {
         return result;
     }
 
-    public Boolean read(BigInteger userId, BigInteger id) {
-        Result<Boolean> result = messageRemoteService.read(userId, id);
-        return result.getData();
-    }
 }

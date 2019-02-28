@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 @Component
@@ -18,7 +20,10 @@ public class RedisTaskContainer {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private static int runTaskThreadNum = 2;
-    private static ExecutorService es = Executors.newFixedThreadPool(runTaskThreadNum);
+    private static ExecutorService es = new ThreadPoolExecutor(runTaskThreadNum, runTaskThreadNum,
+            0L, TimeUnit.MILLISECONDS,
+            new LinkedBlockingQueue<>());
+
     private RedisQueue redisQueue = null;
     @Autowired
     private StringRedisTemplate redisTemplate;

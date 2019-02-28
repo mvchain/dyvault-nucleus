@@ -139,4 +139,9 @@ public interface ConsoleRemoteService {
     @GetMapping("dashboard/blockTransaction/sign")
     Result<List<ExportOrders>> exportSign();
 
+    @GetMapping("dashboard/channel")
+    Result<PageInfo<AppChannel>> getChannels(@RequestBody PageDTO pageDTO);
+
+    @PostMapping("dashboard/channel")
+    Result<Boolean> saveChannel(@RequestBody AppChannel appChannel);
 }

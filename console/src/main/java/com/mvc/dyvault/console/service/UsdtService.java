@@ -141,7 +141,7 @@ public class UsdtService extends BlockService {
                     blockUsdtWithdrawQueueService.update(obj);
                     blockTransactionService.updateHash(obj.getOrderId(), hash);
                 } catch (Exception e) {
-                    if (e.getMessage().equalsIgnoreCase("Error #-26: 258: txn-mempool-conflict") || e.getMessage().startsWith("No unspent on address")) {
+                    if ("Error #-26: 258: txn-mempool-conflict".equalsIgnoreCase(e.getMessage()) ||"No unspent on address".startsWith( e.getMessage())) {
                         //该种错误添加到重试列表
                         obj.setStartedAt(System.currentTimeMillis() + APPROVE_WAIT);
                         blockUsdtWithdrawQueueService.update(obj);
@@ -188,7 +188,7 @@ public class UsdtService extends BlockService {
             //开始更新usdt排队列表
             blockUsdtWithdrawQueueService.start(sign.getOrderId(), sign.getToAddress());
         } catch (Exception e) {
-            if (e.getMessage().equalsIgnoreCase("Error #-26: 258: txn-mempool-conflict")) {
+            if ("Error #-26: 258: txn-mempool-conflict".equalsIgnoreCase(e.getMessage())) {
                 //该种错误添加到重试列表
                 sign.setStartedAt(System.currentTimeMillis() + APPROVE_WAIT);
                 blockSignService.update(sign);

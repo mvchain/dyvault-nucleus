@@ -1,20 +1,18 @@
 package com.mvc.dyvault.app.controller;
 
+import com.mvc.dyvault.app.service.TokenService;
 import com.mvc.dyvault.common.bean.vo.ExchangeRateVO;
+import com.mvc.dyvault.common.bean.vo.Result;
 import com.mvc.dyvault.common.bean.vo.TokenDetailVO;
 import com.mvc.dyvault.common.bean.vo.TokenRatioVO;
-import com.mvc.dyvault.app.service.TokenService;
-import com.mvc.dyvault.common.bean.vo.Result;
 import com.mvc.dyvault.common.swaggermock.SwaggerMock;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -32,11 +30,11 @@ public class TokenController extends BaseController {
     @Autowired
     TokenService tokenService;
 
-    @ApiOperation("获取币种列表,需要传入时间戳,必须缓存.添加移除时本地记录并保存顺序.如果返回内容为空则代表无变化,否则需要刷新本地数据库(全量刷新).搜索时本地搜索")
+    @ApiOperation("获取币种列表")
     @GetMapping
     @SwaggerMock("${token.all}")
-    public Result<List<TokenDetailVO>> getTokens(@RequestParam(required = false) BigInteger timestamp) throws Exception {
-        return new Result<>(tokenService.getTokens(timestamp));
+    public Result<List<TokenDetailVO>> getTokens() throws Exception {
+        return new Result<>(tokenService.getTokens(null));
     }
 
     @ApiOperation("获取币种比值,用于计算资产总值.以CNY为基础货币.建议缓存")

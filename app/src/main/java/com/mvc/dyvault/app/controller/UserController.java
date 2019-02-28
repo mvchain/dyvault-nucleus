@@ -4,7 +4,10 @@ import com.mvc.dyvault.app.service.MailService;
 import com.mvc.dyvault.app.util.GeetestLib;
 import com.mvc.dyvault.common.bean.AppUser;
 import com.mvc.dyvault.common.bean.dto.*;
-import com.mvc.dyvault.common.bean.vo.*;
+import com.mvc.dyvault.common.bean.vo.Result;
+import com.mvc.dyvault.common.bean.vo.TokenVO;
+import com.mvc.dyvault.common.bean.vo.UserSimpleVO;
+import com.mvc.dyvault.common.bean.vo.ValidVO;
 import com.mvc.dyvault.common.constant.RedisConstant;
 import com.mvc.dyvault.common.permission.NotLogin;
 import com.mvc.dyvault.common.swaggermock.SwaggerMock;
@@ -45,7 +48,7 @@ public class UserController extends BaseController {
     @ApiOperation("获取验证码信息")
     @GetMapping("valid")
     @NotLogin
-    public Result<ValidVO> getValiMsg(@RequestParam String email) {
+    public Result<ValidVO> getValidMsg(@RequestParam String email) {
         HashMap<String, String> param = new HashMap<String, String>();
         param.put("user_id", email);
         int gtServerStatus = gtSdk.preProcess(param);
@@ -57,29 +60,6 @@ public class UserController extends BaseController {
         vo.setStatus(gtServerStatus);
         return new Result(vo);
     }
-
-    @ApiOperation("验证验证码")
-    @PostMapping("valid")
-    @NotLogin
-    public Result<String> checkValiImage(@RequestBody ValidDTO validDTO) {
-        String challenge = validDTO.getGeetest_challenge();
-        String validate = validDTO.getGeetest_validate();
-        String seccode = validDTO.getGeetest_seccode();
-        //从session中获取userid
-        String userid = validDTO.getUid();
-        //自定义参数,可选择添加
-        HashMap<String, String> param = new HashMap<String, String>();
-        param.put("user_id", userid);
-        int gtResult = 0;
-        if (validDTO.getStatus() == 1) {
-            gtResult = gtSdk.enhencedValidateRequest(challenge, validate, seccode, param);
-        } else {
-            gtResult = gtSdk.failbackValidateRequest(challenge, validate, seccode);
-        }
-        String token = JwtHelper.create(validDTO.getUid(), BigInteger.ZERO, "valiCode");
-        return new Result<>(gtResult == 1 ? token : "");
-    }
-
 
     @ApiOperation("用户登录,缓存登录令牌.登录规则后续确定,如返回406则需要校验助记词(错误信息中返回助记词字符串)")
     @PostMapping("login")
@@ -122,7 +102,7 @@ public class UserController extends BaseController {
     @PostMapping("")
     public Result<String> regCheck(@RequestBody AppuserRegCheckDTO appuserRegCheckDTO) {
         String key = RedisConstant.MAIL_VALI_PRE + appuserRegCheckDTO.getEmail();
-        Boolean result = mailService.checkSmsValiCode(appuserRegCheckDTO.getEmail(), appuserRegCheckDTO.getValiCode());
+        Boolean result = mailService.checkSmsValiCode(appuserRegCheckDTO.getEmail(), appuserRegCheckDTO.getValidCode());
         Assert.isTrue(result, MessageConstants.getMsg("SMS_ERROR"));
         AppUser user = userService.getUserByUsername(appuserRegCheckDTO.getEmail());
         Assert.isTrue(null == user, MessageConstants.getMsg("USER_EXIST"));
@@ -141,7 +121,7 @@ public class UserController extends BaseController {
     @ApiOperation("用户注册,需要将之前的信息和token一起带入进行校验")
     @NotLogin
     @PostMapping("register")
-    public Result<AppUserRetVO> register(@RequestBody AppUserDTO appUserDTO) {
+    public Result<TokenVO> register(@RequestBody AppUserDTO appUserDTO) {
         Claims claim = JwtHelper.parseJWT(appUserDTO.getToken());
         Assert.notNull(claim, MessageConstants.getMsg("TOKEN_EXPIRE"));
         String username = claim.get("username", String.class);
@@ -160,7 +140,7 @@ public class UserController extends BaseController {
             Assert.isTrue(id != 0L, MessageConstants.getMsg("INVITE_ERROR"));
             Assert.isTrue(checkResult, MessageConstants.getMsg("REGISTER_WRONG"));
         }
-        AppUserRetVO vo = userService.register(appUserDTO);
+        TokenVO vo = userService.register(appUserDTO);
         return new Result<>(vo);
     }
 
@@ -212,7 +192,7 @@ public class UserController extends BaseController {
     @ApiOperation("修改绑定邮箱")
     @PutMapping("email")
     public Result<Boolean> updateEmail(@RequestBody AppUserMailDTO appUserMailDTO) {
-        Boolean result = mailService.checkSmsValiCode(appUserMailDTO.getEmail(), appUserMailDTO.getValiCode());
+        Boolean result = mailService.checkSmsValiCode(appUserMailDTO.getEmail(), appUserMailDTO.getValidCode());
         Assert.isTrue(result, MessageConstants.getMsg("SMS_ERROR"));
         Claims claim = JwtHelper.parseJWT(appUserMailDTO.getToken());
         String type = claim.get("type", String.class);
@@ -233,7 +213,7 @@ public class UserController extends BaseController {
     @PostMapping("email")
     public Result<String> checkEmail(@RequestBody AppUserEmailDTO appUserEmailDTO) {
         String email = userService.getEmail(getUserId());
-        Boolean result = mailService.checkSmsValiCode(email, appUserEmailDTO.getValiCode());
+        Boolean result = mailService.checkSmsValiCode(email, appUserEmailDTO.getValidCode());
         Assert.isTrue(result, MessageConstants.getMsg("SMS_ERROR"));
         String token = JwtHelper.create(email, getUserId(), "email");
         return new Result<>(token);

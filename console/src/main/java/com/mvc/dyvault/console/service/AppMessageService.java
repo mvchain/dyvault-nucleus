@@ -35,9 +35,7 @@ public class AppMessageService {
         ConditionUtil.andCondition(criteria, "user_id = ", userId);
         PageHelper.startPage(1, pageDTO.getPageSize());
         PageHelper.orderBy("created_at desc");
-        if (timeSearchDTO.getType() == 0 && null != timeSearchDTO.getTimestamp()) {
-            ConditionUtil.andCondition(criteria, "created_at > ", timeSearchDTO.getTimestamp());
-        } else if (timeSearchDTO.getType() == 1 && null != timeSearchDTO.getTimestamp()) {
+        if (null != timeSearchDTO.getTimestamp() && !BigInteger.ZERO.equals(timeSearchDTO.getTimestamp())) {
             ConditionUtil.andCondition(criteria, "created_at < ", timeSearchDTO.getTimestamp());
         }
         return appMessageMapper.selectByCondition(condition);

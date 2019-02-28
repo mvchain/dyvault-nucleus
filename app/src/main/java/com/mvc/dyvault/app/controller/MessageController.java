@@ -28,15 +28,8 @@ public class MessageController extends BaseController {
     @SwaggerMock("${message.list}")
     public Result<List<MessageVO>> getlist(@ModelAttribute TimeSearchDTO timeSearchDTO, @ModelAttribute PageDTO pageDTO) {
         BigInteger userId = getUserId();
-        List<MessageVO> list = messageService.getlist(userId, timeSearchDTO.getTimestamp(), timeSearchDTO.getType(), pageDTO.getPageSize());
+        List<MessageVO> list = messageService.getlist(userId, timeSearchDTO.getTimestamp(), pageDTO.getPageSize());
         return new Result<>(list);
-    }
-
-    @ApiOperation("变更已读状态")
-    @PutMapping("{id}")
-    @SwaggerMock("${message.read}")
-    public Result<Boolean> read(@PathVariable BigInteger id) {
-        return new Result<>(messageService.read(getUserId(), id));
     }
 
 }

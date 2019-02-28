@@ -77,9 +77,9 @@ public class CommonAddressService extends AbstractService<CommonAddress> impleme
         StringBuilder orders = new StringBuilder();
         Map<String, BigDecimal> output = new HashMap<>(list.size());
         for (BlockTransaction transaction : list) {
-            if (transaction.getTokenType().equalsIgnoreCase("ETH")) {
+            if ("ETH".equalsIgnoreCase(transaction.getTokenType())) {
                 addEthWithdrawOrder(result, nonceMap, tokenMap, hot, cold, transaction);
-            } else if (transaction.getTokenType().equalsIgnoreCase("BTC")) {
+            } else if ("BTC".equalsIgnoreCase(transaction.getTokenType())) {
                 addBtcWithdrawOrder(orders, output, result, tokenMap, btcCold, transaction, usdtOrder, blockHotAddress, btcNumber);
             }
         }
@@ -159,7 +159,7 @@ public class CommonAddressService extends AbstractService<CommonAddress> impleme
                 //不存在的令牌忽略
                 continue;
             }
-            if (address.getTokenType().equalsIgnoreCase("ETH")) {
+            if ("ETH".equalsIgnoreCase(address.getTokenType())) {
                 addEthOrder(result, nonceMap, hot, cold, address, orders, token);
             }
         }
@@ -248,7 +248,7 @@ public class CommonAddressService extends AbstractService<CommonAddress> impleme
         BigInteger nonce;
         BigInteger gasPrice = Convert.toWei(new BigDecimal(token.getTransaferFee()), Convert.Unit.GWEI).toBigInteger();
         //erc20地址需要先运行approve方法
-        if (address.getApprove() == 0 && address.getTokenType().equalsIgnoreCase("ETH") && !address.getAddressType().equalsIgnoreCase("ETH")) {
+        if (address.getApprove() == 0 &&"ETH".equalsIgnoreCase( address.getTokenType()) && !"ETH".equalsIgnoreCase(address.getAddressType())) {
             BigInteger gasLimit = blockService.get("ETH").getEthEstimateApprove(token.getTokenContractAddress(), address.getAddress(), cold.getAddress());
             //预先发送手续费,该操作gasPrice暂时固定
             BigDecimal value = Convert.fromWei(new BigDecimal(gasLimit.multiply(gasPrice)), Convert.Unit.ETHER);

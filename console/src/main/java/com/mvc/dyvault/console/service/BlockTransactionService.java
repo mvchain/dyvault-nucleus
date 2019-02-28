@@ -121,6 +121,13 @@ public class BlockTransactionService extends AbstractService<BlockTransaction> i
     }
 
     public void sendTransaction(BigInteger userId, TransactionDTO transactionDTO) {
+        if (transactionDTO.getAddress().indexOf("@") > 0) {
+            //email address
+            AppUser user = appUserService.findOneBy("email", transactionDTO.getAddress());
+            Assert.notNull(user, MessageConstants.getMsg("USER_NOT_EXIST"));
+            String address = appUserAddressService.getAddress(user.getId(), transactionDTO.getTokenId());
+            transactionDTO.setAddress(address);
+        }
         checkTransaction(userId, transactionDTO);
         BlockTransactionBO bo = new BlockTransactionBO();
         bo.setUserId(userId);

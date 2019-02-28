@@ -19,7 +19,6 @@
 package com.mvc.dyvault.common.util.bip39;
 
 
-
 import com.mvc.dyvault.common.util.bip39.wordlists.English;
 
 import java.util.ArrayList;
@@ -125,8 +124,9 @@ public class MnemonicCode {
             // Set the next 11 bits to the value of the index.
             for (int ii = 0;
                  ii < 11;
-                 ++ii)
+                 ++ii) {
                 concatBits[(wordindex * 11) + ii] = (ndx & (1 << (10 - ii))) != 0;
+            }
             ++wordindex;
         }
 
@@ -137,27 +137,27 @@ public class MnemonicCode {
         byte[] entropy = new byte[entropyLengthBits / 8];
         for (int ii = 0;
              ii < entropy.length;
-             ++ii)
+             ++ii) {
             for (int jj = 0;
                  jj < 8;
-                 ++jj)
+                 ++jj) {
                 if (concatBits[(ii * 8) + jj]) {
                     entropy[ii] |= 1 << (7 - jj);
                 }
-
-        // Take the digest of the entropy.
-
+            }
+            // Take the digest of the entropy.
+        }
         byte[] hash = SHA256.sha256(entropy);
         boolean[] hashBits = bytesToBits(hash);
 
         // Check all the checksum bits.
         for (int i = 0;
              i < checksumLengthBits;
-             ++i)
+             ++i) {
             if (concatBits[entropyLengthBits + i] != hashBits[i]) {
                 throw new MnemonicException.MnemonicChecksumException();
             }
-
+        }
         return entropy;
     }
 
@@ -225,11 +225,13 @@ public class MnemonicCode {
         boolean[] bits = new boolean[data.length * 8];
         for (int i = 0;
              i < data.length;
-             ++i)
+             ++i) {
             for (int j = 0;
                  j < 8;
-                 ++j)
+                 ++j) {
                 bits[(i * 8) + j] = (data[i] & (1 << (7 - j))) != 0;
+            }
+        }
         return bits;
     }
 }

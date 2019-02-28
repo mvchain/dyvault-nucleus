@@ -52,7 +52,9 @@ public class BtcAction {
         List<TetherBalance> tetherBalanceList = new ArrayList<>();
         for (OmniWalletAddressBalance omniWalletAddressBalance : omniBalanceList) {
             TetherBalance tetherBalance = TetherBalance.convert(tetherId, omniWalletAddressBalance);
-            if (tetherBalance != null) tetherBalanceList.add(tetherBalance);
+            if (tetherBalance != null) {
+                tetherBalanceList.add(tetherBalance);
+            }
         }
         return tetherBalanceList;
     }
@@ -202,7 +204,9 @@ public class BtcAction {
 
     public static String getScriptPubKey(String address) throws BitcoindException, IOException, CommunicationException {
         List<Output> listUnspent = listUnspent(address);
-        if (listUnspent.size() == 0) return null;
+        if (listUnspent.size() == 0) {
+            return null;
+        }
         return listUnspent.get(0).getScriptPubKey();
     }
 

@@ -121,7 +121,7 @@ public class Job {
             }
         } else {
             List<ExchangeRateVO> list = JSON.parseArray(result, ExchangeRateVO.class);
-            usdRate = list.stream().filter(obj -> obj.getName().equalsIgnoreCase("$ USD")).collect(Collectors.toList()).get(0);
+            usdRate = list.stream().filter(obj ->"$ USD".equalsIgnoreCase( obj.getName())).collect(Collectors.toList()).get(0);
 
         }
         return usdRate;

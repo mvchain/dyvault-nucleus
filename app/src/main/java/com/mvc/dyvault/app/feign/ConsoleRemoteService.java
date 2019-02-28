@@ -1,6 +1,7 @@
 package com.mvc.dyvault.app.feign;
 
 import com.github.pagehelper.PageInfo;
+import com.mvc.dyvault.app.bean.dto.PageDTO;
 import com.mvc.dyvault.common.bean.*;
 import com.mvc.dyvault.common.bean.dto.AppUserDTO;
 import com.mvc.dyvault.common.bean.dto.AssertVisibleDTO;
@@ -33,10 +34,8 @@ public interface ConsoleRemoteService {
             @RequestParam("userId") BigInteger userId,
             @RequestParam("transactionType") Integer transactionType,
             @RequestParam("id") BigInteger id,
-            @RequestParam("type") Integer type,
             @RequestParam("pageSize") Integer pageSize,
-            @RequestParam("tokenId") BigInteger tokenId,
-            @RequestParam("classify") Integer classify
+            @RequestParam("tokenId") BigInteger tokenId
     );
 
     @GetMapping("appOrder/{id}")
@@ -52,10 +51,7 @@ public interface ConsoleRemoteService {
     Result<Boolean> sendTransaction(@PathVariable("userId") BigInteger userId, @RequestBody TransactionDTO transactionDTO);
 
     @GetMapping("appMessage")
-    Result<PageInfo<AppMessage>> getlist(@RequestParam("userId") BigInteger userId, @RequestParam("timestamp") BigInteger timestamp, @RequestParam("type") Integer type, @RequestParam("pageSize") Integer pageSize);
-
-    @PutMapping("appMessage/{id}")
-    Result<Boolean> read(@RequestParam("userId") BigInteger userId, @PathVariable("id") BigInteger id);
+    Result<PageInfo<AppMessage>> getlist(@RequestParam("userId") BigInteger userId, @RequestParam("timestamp") BigInteger timestamp, @RequestParam("pageSize") Integer pageSize);
 
     @GetMapping("commonToken")
     Result<PageInfo<CommonToken>> all(@RequestParam("visiable") Integer visiable, @RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize, @RequestParam("updatedStartAt") BigInteger timestamp);
@@ -83,5 +79,8 @@ public interface ConsoleRemoteService {
 
     @GetMapping("appInfo/{appType}")
     Result<AppInfo> getApp(@PathVariable("appType") String appType);
+
+    @GetMapping("channel")
+    Result<List<AppChannel>> getChannel(@RequestParam(required = false, value = "id") BigInteger id, @RequestBody PageDTO pageDTO);
 
 }

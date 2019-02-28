@@ -47,6 +47,9 @@ public class AppOrderService extends AbstractService<AppOrder> implements BaseSe
 
     public TransactionDetailVO getDetail(BigInteger userId, BigInteger id) {
         var order = findById(id);
+        if (null == order) {
+            return null;
+        }
         Assert.isTrue(userId.equals(order.getUserId()), MessageConstants.getMsg("PERMISSION_WRONG"));
         var token = commonTokenService.findById(order.getTokenId());
         TransactionDetailVO vo = new TransactionDetailVO();
@@ -74,17 +77,13 @@ public class AppOrderService extends AbstractService<AppOrder> implements BaseSe
     }
 
     public List<TransactionSimpleVO> getTransactions(BigInteger userId, TransactionSearchDTO transactionSearchDTO) {
-        //TODO 暂时从数据库查询,后续优化
         Condition condition = new Condition(AppOrder.class);
         Example.Criteria criteria = condition.createCriteria();
         ConditionUtil.andCondition(criteria, "user_id = ", userId);
-        ConditionUtil.andCondition(criteria, "classify = ", transactionSearchDTO.getClassify());
         ConditionUtil.andCondition(criteria, "token_id = ", transactionSearchDTO.getTokenId());
         PageHelper.startPage(1, transactionSearchDTO.getPageSize());
         PageHelper.orderBy("id desc");
-        if (BusinessConstant.SEARCH_DIRECTION_UP.equals(transactionSearchDTO.getType()) && (null != transactionSearchDTO.getId()) && !transactionSearchDTO.getId().equals(BigInteger.ZERO)) {
-            ConditionUtil.andCondition(criteria, "id > ", transactionSearchDTO.getId());
-        } else if (BusinessConstant.SEARCH_DIRECTION_DOWN.equals(transactionSearchDTO.getType()) && (null != transactionSearchDTO.getId()) && !transactionSearchDTO.getId().equals(BigInteger.ZERO)) {
+        if (null != transactionSearchDTO.getId() && !transactionSearchDTO.getId().equals(BigInteger.ZERO)) {
             ConditionUtil.andCondition(criteria, "id <", transactionSearchDTO.getId());
         }
         List<AppOrder> list = findByCondition(condition);
@@ -94,7 +93,7 @@ public class AppOrderService extends AbstractService<AppOrder> implements BaseSe
             CommonTokenPrice price = commonTokenPriceService.findById(token.getId());
             TransactionSimpleVO vo = new TransactionSimpleVO();
             BeanUtils.copyProperties(obj, vo);
-            if (vo.getOrderRemark().equalsIgnoreCase("手续费支出")) {
+            if ("手续费支出".equalsIgnoreCase(vo.getOrderRemark())) {
                 vo.setValue(null == obj.getFee().abs() ? BigDecimal.ZERO : obj.getFee().abs());
             } else {
                 vo.setValue(vo.getValue().abs());
@@ -154,7 +153,6 @@ public class AppOrderService extends AbstractService<AppOrder> implements BaseSe
         appMessageService.transferMsg(obj.getId(), obj.getUserId(), obj.getValue(), tokenService.getTokenName(obj.getTokenId()), obj.getOrderType(), obj.getStatus());
         updateCache(obj.getId());
     }
-
 
 
     public void saveReturnOrder(BlockTransaction blockTransaction) {

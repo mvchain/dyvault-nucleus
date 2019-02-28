@@ -9,7 +9,9 @@ import org.apkinfo.api.util.AXmlResourceParser;
 import org.apkinfo.api.util.TypedValue;
 import org.apkinfo.api.util.XmlPullParser;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -31,7 +33,7 @@ public final class ReadUtil {
             ZipInputStream zipStream = new ZipInputStream(inputStream);
             ZipEntry zipEntry = zipStream.getNextEntry();
             while (true) {
-                if (null == zipEntry || zipEntry.getName().equalsIgnoreCase("androidmanifest.xml")) {
+                if (null == zipEntry || "androidmanifest.xml".equalsIgnoreCase(zipEntry.getName())) {
                     break;
                 }
             }
@@ -42,7 +44,7 @@ public final class ReadUtil {
                     break;
                 }
                 String name = parser.getName();
-                if (null != name && name.toLowerCase().equals("manifest")) {
+                if (null != name && "manifest".equals(name.toLowerCase())) {
                     for (int i = 0; i != parser.getAttributeCount(); i++) {
                         if ("versionName".equals(parser.getAttributeName(i))) {
                             String versionName = getAttributeValue(parser, i);

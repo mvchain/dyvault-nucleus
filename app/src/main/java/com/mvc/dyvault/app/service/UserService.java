@@ -2,8 +2,14 @@ package com.mvc.dyvault.app.service;
 
 import com.mvc.dyvault.app.feign.ConsoleRemoteService;
 import com.mvc.dyvault.common.bean.AppUser;
-import com.mvc.dyvault.common.bean.dto.*;
-import com.mvc.dyvault.common.bean.vo.*;
+import com.mvc.dyvault.common.bean.dto.AppUserDTO;
+import com.mvc.dyvault.common.bean.dto.AppUserPwdDTO;
+import com.mvc.dyvault.common.bean.dto.AppUserResetDTO;
+import com.mvc.dyvault.common.bean.dto.UserDTO;
+import com.mvc.dyvault.common.bean.vo.AppUserRetVO;
+import com.mvc.dyvault.common.bean.vo.Result;
+import com.mvc.dyvault.common.bean.vo.TokenVO;
+import com.mvc.dyvault.common.bean.vo.UserSimpleVO;
 import com.mvc.dyvault.common.util.*;
 import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.StringUtils;
@@ -77,7 +83,7 @@ public class UserService {
         }
         String username = claim.get("username", String.class);
         String type = claim.get("type", String.class);
-        if (!type.equalsIgnoreCase("valiCode") || !username.equalsIgnoreCase(email)) {
+        if (!"valiCode".equalsIgnoreCase(type) || !username.equalsIgnoreCase(email)) {
             throw new PassWrongMoreException(MessageConstants.getMsg("USER_PASS_WRONG_MORE"), 402);
         }
         return true;
@@ -117,10 +123,19 @@ public class UserService {
         return userResult.getData();
     }
 
-    public AppUserRetVO register(AppUserDTO appUserDTO) {
+    public TokenVO register(AppUserDTO appUserDTO) {
         Result<AppUserRetVO> userResult = userRemoteService.register(appUserDTO);
         mnemonicsActive(appUserDTO.getEmail());
-        return userResult.getData();
+        Result<AppUser> user = userRemoteService.getUserByUsername(appUserDTO.getEmail());
+        TokenVO vo = new TokenVO();
+        String token = JwtHelper.createToken(appUserDTO.getEmail(), user.getData().getId());
+        String refreshToken = JwtHelper.createRefresh(appUserDTO.getEmail(), user.getData().getId());
+        //密码正确后清空错误次数
+        vo.setRefreshToken(refreshToken);
+        vo.setToken(token);
+        vo.setUserId(user.getData().getId());
+        vo.setEmail(user.getData().getEmail());
+        return vo;
     }
 
     public void mnemonicsActive(String email) {

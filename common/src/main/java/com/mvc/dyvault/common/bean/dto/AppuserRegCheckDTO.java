@@ -21,6 +21,6 @@ public class AppuserRegCheckDTO {
     private String email;
     @NotNull
     @ApiModelProperty("验证码")
-    private String valiCode;
+    private String validCode;
 
 }

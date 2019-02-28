@@ -38,7 +38,7 @@ public class AssetService {
     }
 
     public List<TransactionSimpleVO> getTransactions(BigInteger userId, TransactionSearchDTO transactionSearchDTO) {
-        Result<List<TransactionSimpleVO>> result = consoleRemoteService.getTransactions(userId, transactionSearchDTO.getTransactionType(), transactionSearchDTO.getId(), transactionSearchDTO.getType(), transactionSearchDTO.getPageSize(), transactionSearchDTO.getTokenId(), transactionSearchDTO.getClassify());
+        Result<List<TransactionSimpleVO>> result = consoleRemoteService.getTransactions(userId, transactionSearchDTO.getTransactionType(), transactionSearchDTO.getId(), transactionSearchDTO.getPageSize(), transactionSearchDTO.getTokenId());
         return result.getData();
     }
 
@@ -59,7 +59,9 @@ public class AssetService {
 
     public Boolean sendTransaction(BigInteger userId, TransactionDTO transactionDTO) {
         Boolean regResult = false;
-        if (transactionDTO.getTokenId().equals(BigInteger.valueOf(4)) || transactionDTO.getTokenId().equals(BigInteger.valueOf(2))) {
+        if (transactionDTO.getAddress().indexOf("@") > 0) {
+            regResult = true;
+        } else if (transactionDTO.getTokenId().equals(BigInteger.valueOf(4)) || transactionDTO.getTokenId().equals(BigInteger.valueOf(2))) {
             //usdt
             regResult = transactionDTO.getAddress().matches(USDT_REG_ARR);
         } else {

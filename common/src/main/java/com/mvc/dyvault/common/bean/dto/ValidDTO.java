@@ -11,9 +11,9 @@ import lombok.Data;
 @ApiModel("验证信息输入")
 public class ValidDTO {
 
-    private String geetest_challenge;
-    private String geetest_validate;
-    private String geetest_seccode;
+//    private String geetest_challenge;
+//    private String geetest_validate;
+//    private String geetest_seccode;
     private String uid;
     private Integer status;
 

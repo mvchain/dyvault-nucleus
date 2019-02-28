@@ -13,5 +13,5 @@ import lombok.Data;
 public class AppUserEmailDTO {
 
     @ApiModelProperty("验证码")
-    private String valiCode;
+    private String validCode;
 }

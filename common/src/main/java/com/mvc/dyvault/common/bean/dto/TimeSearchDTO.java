@@ -1,6 +1,5 @@
 package com.mvc.dyvault.common.bean.dto;
 
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.math.BigInteger;
@@ -13,6 +12,5 @@ import java.math.BigInteger;
 public class TimeSearchDTO {
 
     private BigInteger timestamp;
-    @ApiModelProperty("0上拉 1下拉")
-    private Integer type;
+
 }

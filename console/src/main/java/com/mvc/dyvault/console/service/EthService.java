@@ -351,7 +351,7 @@ public class EthService extends BlockService {
             transaction.setHeight(receipt.get().getBlockNumber());
             transaction.setStatus(1);
             transaction.setTransactionStatus(4);
-            if (isContractTransfer(tx) && (receipt.get().getStatus().equals("0x1") && receipt.get().getLogs().size() == 0 || receipt.get().getStatus().equals("0x0"))) {
+            if (isContractTransfer(tx) && ("0x1".equals(receipt.get().getStatus()) && receipt.get().getLogs().size() == 0 || "0x0".equals(receipt.get().getStatus()))) {
                 transaction.setErrorMsg("转账失败");
                 transaction.setErrorData("转账失败");
                 transaction.setStatus(9);
@@ -362,7 +362,7 @@ public class EthService extends BlockService {
     }
 
     private Boolean isContractTransfer(Transaction tx) {
-        if (null == tx.getInput() || tx.getInput().equals("0x") || tx.getInput().length() <= 10) {
+        if (null == tx.getInput() || "0x".equals(tx.getInput()) || tx.getInput().length() <= 10) {
             return false;
         }
         String method = tx.getInput().substring(0, 10);
@@ -370,7 +370,7 @@ public class EthService extends BlockService {
     }
 
     private Boolean isApprove(Transaction tx) {
-        if (null == tx.getInput() || tx.getInput().equals("0x") || tx.getInput().length() <= 10) {
+        if (null == tx.getInput() || "0x".equals(tx.getInput()) || tx.getInput().length() <= 10) {
             return false;
         }
         String method = tx.getInput().substring(0, 10);
@@ -378,7 +378,7 @@ public class EthService extends BlockService {
     }
 
     private Boolean isEthTransfer(final Transaction tx) {
-        if (null != tx.getInput() && tx.getInput().equals("0x")) {
+        if (null != tx.getInput() &&"0x".equals( tx.getInput())) {
             return true;
         }
         return false;
