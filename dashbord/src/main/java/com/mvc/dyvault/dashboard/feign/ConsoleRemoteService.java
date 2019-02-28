@@ -144,4 +144,7 @@ public interface ConsoleRemoteService {
 
     @PostMapping("dashboard/channel")
     Result<Boolean> saveChannel(@RequestBody AppChannel appChannel);
+
+    @DeleteMapping("dashboard/channel/{id}")
+    Result<Boolean> delete(@PathVariable("id") BigInteger id);
 }

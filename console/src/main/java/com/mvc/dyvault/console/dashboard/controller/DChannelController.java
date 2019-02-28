@@ -48,4 +48,9 @@ public class DChannelController extends BaseController {
         return new Result<>(true);
     }
 
+    @DeleteMapping("{id}")
+    Result<Boolean> delChannel(@PathVariable BigInteger id) {
+        appChannelService.deleteById(id);
+        return new Result<>(true);
+    }
 }

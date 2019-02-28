@@ -7,6 +7,8 @@ import com.mvc.dyvault.common.bean.vo.Result;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigInteger;
+
 /**
  * @author qiyichen
  * @create 2018/11/19 19:58
@@ -25,4 +27,8 @@ public class ChannelService extends BaseService {
         return result.getData();
     }
 
+    public Boolean delete(BigInteger id) {
+        Result<Boolean> result = remoteService.delete(id);
+        return result.getData();
+    }
 }

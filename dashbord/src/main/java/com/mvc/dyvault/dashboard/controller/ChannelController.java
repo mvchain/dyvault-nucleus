@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.math.BigInteger;
 
 /**
  * @author qiyichen
@@ -35,6 +36,13 @@ public class ChannelController extends BaseController {
     @PostMapping()
     public Result<Boolean> save(@RequestBody AppChannel appChannel) {
         Boolean result = channelService.save(appChannel);
+        return new Result<>(result);
+    }
+
+    @ApiOperation("save app channel")
+    @DeleteMapping("{id}")
+    public Result<Boolean> delete(@PathVariable BigInteger id) {
+        Boolean result = channelService.delete(id);
         return new Result<>(result);
     }
 
