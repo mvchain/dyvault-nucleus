@@ -2,6 +2,43 @@
 <!DOCTYPE mycat:schema SYSTEM "schema.dtd">
 <mycat:schema xmlns:mycat="http://io.mycat/">
 
+    <schema name="nucleus" checkSQLschema="false" sqlMaxLimit="100">
+
+        <!--table属性说明
+         name：逻辑表名，同一个库（schema）不允许重复
+        dataNode：所属的数据库节点名
+        rule：使用的规则名，mycat默认内置了多种规则，可以查看rule.xml
+        ruleRequired： 如果需要绑定分片规则则设置为true，为true时rule必须存在
+        primaryKey： 如果使用了非主键进行分片，需要设置该属性，具体逻辑单独查询，较为复杂
+        type：不设置为普通表，可以指定为 global， 指定为全局表时， 所有节点会冗余该表， 用于部分类似字典的表
+        autoIncrement： 申明是否使用自增长主键，默认false
+        needAddLimit： 用于覆盖sqlMaxLimit属性， 默认为true
+        -->
+        <!--以下数据很少,单库即可-->
+        <table name="admin_permission" dataNode="dn4" primaryKey="id" autoIncrement="true"/>
+        <table name="admin_user" dataNode="dn4" primaryKey="id" autoIncrement="true"/>
+        <table name="admin_user_permission" dataNode="dn4" primaryKey="user_id" autoIncrement="true"/>
+        <table name="admin_wallet" dataNode="dn4" primaryKey="id" autoIncrement="true"/>
+        <table name="common_token" dataNode="dn4" primaryKey="id" autoIncrement="true"/>
+        <table name="common_token_price" dataNode="dn4" primaryKey="token_id" autoIncrement="true"/>
+        <table name="app_channel" dataNode="dn4" primaryKey="id" autoIncrement="true"/>
+        <table name="app_info" dataNode="dn4" primaryKey="id" autoIncrement="true"/>
+        <!--以下数据库较大,进行分片-->
+        <table name="app_message" dataNode="dn4,dn5,dn6" primaryKey="id" autoIncrement="true" rule="sharding-by-murmur-userid"/>
+        <table name="app_order" dataNode="dn4,dn5,dn6" primaryKey="id" autoIncrement="true" rule="sharding-by-murmur-userid"/>
+        <table name="app_user" dataNode="dn4,dn5,dn6" primaryKey="id" autoIncrement="true" rule="sharding-by-murmur"/>
+        <table name="app_user_address" dataNode="dn4,dn5,dn6" primaryKey="user_id" autoIncrement="true" rule="sharding-by-murmur-userid"/>
+        <table name="app_user_balance" dataNode="dn4,dn5,dn6" primaryKey="user_id" autoIncrement="true" rule="sharding-by-murmur-userid"/>
+        <table name="block_sign" dataNode="dn4,dn5,dn6" primaryKey="id" autoIncrement="true" rule="sharding-by-murmur"/>
+        <table name="block_transaction" dataNode="dn4,dn5,dn6" primaryKey="id" autoIncrement="true" rule="sharding-by-murmur"/>
+        <table name="block_usdt_withdraw_queue" dataNode="dn4,dn5,dn6" primaryKey="id" autoIncrement="true" rule="sharding-by-murmur"/>
+        <table name="common_address" dataNode="dn4,dn5,dn6" primaryKey="id" autoIncrement="true" rule="sharding-by-murmur"/>
+        <table name="common_token_history" dataNode="dn4,dn5,dn6" primaryKey="id" autoIncrement="true" rule="sharding-by-murmur-tokenid"/>
+        <table name="token_volume" dataNode="dn4,dn5,dn6" primaryKey="id" autoIncrement="true" rule="sharding-by-murmur"/>
+        <table name="app_user_invite" dataNode="dn4,dn5,dn6" primaryKey="user_id" autoIncrement="true" rule="sharding-by-murmur-userid"/>
+    </schema>
+
+
     <!--schema 属性说明
 dataNode: 逻辑库名, 即 use someDatabase 中的库名
 checkSQLschema: 建议设置默认值, 用于对schema字段的特殊处理, 实际使用中避免使用该关键字即可
@@ -67,6 +104,10 @@ sqlMaxLimit: 如果查询的表存在分片且查询条件中没有limit字段, 
     <dataNode name="dn1" dataHost="localhost1" database="vpay"/>
     <dataNode name="dn2" dataHost="localhost2" database="vpay"/>
     <dataNode name="dn3" dataHost="localhost3" database="vpay"/>
+
+    <dataNode name="dn4" dataHost="localhost1" database="nucleus"/>
+    <dataNode name="dn5" dataHost="localhost2" database="nucleus"/>
+    <dataNode name="dn6" dataHost="localhost3" database="nucleus"/>
 
     <dataHost name="localhost1" maxCon="1000" minCon="10" balance="3"
               writeType="0" dbType="mysql" dbDriver="native" switchType="1" slaveThreshold="100">

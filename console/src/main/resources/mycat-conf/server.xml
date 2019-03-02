@@ -97,7 +97,7 @@
 
 	<user name="root" defaultAccount="true">
 		<property name="password">123456</property>
-		<property name="schemas">vpay</property>
+		<property name="schemas">vpay, nucleus</property>
 		<property name="benchmark">11111</property>
 		<!-- 表级 DML 权限设置 -->
 		<!-- 		

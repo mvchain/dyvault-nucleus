@@ -42,8 +42,6 @@ public class CommonAddressService extends AbstractService<CommonAddress> impleme
     @Autowired
     AdminWalletService adminWalletService;
     @Autowired
-    BlockHotAddressService blockHotAddressService;
-    @Autowired
     Web3j web3j;
     @Autowired
     BtcdClient btcdClient;
@@ -72,7 +70,6 @@ public class CommonAddressService extends AbstractService<CommonAddress> impleme
             return result;
         }
         ExportOrders usdtOrder = new ExportOrders();
-        BlockHotAddress blockHotAddress = new BlockHotAddress();
         Integer btcNumber = 0;
         StringBuilder orders = new StringBuilder();
         Map<String, BigDecimal> output = new HashMap<>(list.size());
@@ -80,7 +77,7 @@ public class CommonAddressService extends AbstractService<CommonAddress> impleme
             if ("ETH".equalsIgnoreCase(transaction.getTokenType())) {
                 addEthWithdrawOrder(result, nonceMap, tokenMap, hot, cold, transaction);
             } else if ("BTC".equalsIgnoreCase(transaction.getTokenType())) {
-                addBtcWithdrawOrder(orders, output, result, tokenMap, btcCold, transaction, usdtOrder, blockHotAddress, btcNumber);
+                addBtcWithdrawOrder(result, tokenMap, btcCold, transaction);
             }
         }
         return result;
@@ -94,7 +91,7 @@ public class CommonAddressService extends AbstractService<CommonAddress> impleme
      * @param btcCold
      * @param transaction
      */
-    private void addBtcWithdrawOrder(StringBuilder orders, Map<String, BigDecimal> output, List<ExportOrders> result, Map<BigInteger, CommonToken> tokenMap, AdminWallet btcCold, BlockTransaction transaction, ExportOrders usdtOrder, BlockHotAddress blockHotAddress, Integer btcNumber) {
+    private void addBtcWithdrawOrder(List<ExportOrders> result, Map<BigInteger, CommonToken> tokenMap, AdminWallet btcCold, BlockTransaction transaction) {
         try {
             CommonToken token = tokenMap.get(transaction.getTokenId());
             BigDecimal fee = new BigDecimal(String.valueOf(token.getTransaferFee()));
@@ -248,7 +245,7 @@ public class CommonAddressService extends AbstractService<CommonAddress> impleme
         BigInteger nonce;
         BigInteger gasPrice = Convert.toWei(new BigDecimal(token.getTransaferFee()), Convert.Unit.GWEI).toBigInteger();
         //erc20地址需要先运行approve方法
-        if (address.getApprove() == 0 &&"ETH".equalsIgnoreCase( address.getTokenType()) && !"ETH".equalsIgnoreCase(address.getAddressType())) {
+        if (address.getApprove() == 0 && "ETH".equalsIgnoreCase(address.getTokenType()) && !"ETH".equalsIgnoreCase(address.getAddressType())) {
             BigInteger gasLimit = blockService.get("ETH").getEthEstimateApprove(token.getTokenContractAddress(), address.getAddress(), cold.getAddress());
             //预先发送手续费,该操作gasPrice暂时固定
             BigDecimal value = Convert.fromWei(new BigDecimal(gasLimit.multiply(gasPrice)), Convert.Unit.ETHER);

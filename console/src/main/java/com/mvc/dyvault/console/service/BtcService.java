@@ -50,8 +50,6 @@ public class BtcService extends BlockService {
     CommonTokenService commonTokenService;
     @Autowired
     BlockUsdtWithdrawQueueService blockUsdtWithdrawQueueService;
-    @Autowired
-    BlockHotAddressService blockHotAddressService;
     //发送usdt时必然会带上这笔金额,因此发送手续费时需要额外发送这笔数量,否则会从预设手续费中扣除从而导致和期望结果不一致
     private final BigDecimal USDT_LIMIT_FEE = new BigDecimal("0.00000546");
 
