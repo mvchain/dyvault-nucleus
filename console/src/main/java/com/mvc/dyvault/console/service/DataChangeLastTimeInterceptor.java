@@ -32,9 +32,9 @@ public class DataChangeLastTimeInterceptor implements Interceptor {
      */
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
-        if(METHOD_UPDATE .equalsIgnoreCase(invocation.getMethod().getName())){
-            Object[] args = invocation.getArgs();
-            MappedStatement ms = (MappedStatement) args[0];
+        Object[] args = invocation.getArgs();
+        MappedStatement ms = (MappedStatement) args[0];
+        if (METHOD_UPDATE.equalsIgnoreCase(invocation.getMethod().getName()) && METHOD_UPDATE.equalsIgnoreCase(ms.getSqlCommandType().name()) && ms.getId().indexOf("updateByPrimary") > 0) {
             Object parameter = args[1];
             Executor executor = (Executor) invocation.getTarget();
             BoundSql boundSql = ms.getBoundSql(parameter);
@@ -49,8 +49,8 @@ public class DataChangeLastTimeInterceptor implements Interceptor {
                 stat.setObject(i + 1, value);
             }
             return stat.executeUpdate();
-        } else{
-         return    invocation.proceed();
+        } else {
+            return invocation.proceed();
         }
 
     }
