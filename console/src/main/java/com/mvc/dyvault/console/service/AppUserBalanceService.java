@@ -97,12 +97,26 @@ public class AppUserBalanceService extends AbstractService<AppUserBalance> imple
         return balance;
     }
 
+    private TokenBalanceVO getBaseVO(CommonToken token){
+        TokenBalanceVO vo = new TokenBalanceVO();
+        vo.setTokenId(token.getId());
+        vo.setValue(BigDecimal.ZERO);
+        vo.setTokenName(token.getTokenName());
+        vo.setTokenImage(token.getTokenImage());
+        vo.setRatio(BigDecimal.ONE);
+        return vo;
+    }
+
     public TokenBalanceVO getAsset(BigInteger userId, BigInteger tokenId, Boolean ignoreHide) {
         String key = "AppUserBalance".toUpperCase() + "_" + userId;
         initBalance(userId, key);
         Object balance = redisTemplate.boundHashOps(key).get(String.valueOf(tokenId));
+        CommonToken token = commonTokenService.findById(tokenId);
+        if (null == token) {
+            return getBaseVO(token);
+        }
         if (null == balance) {
-            return null;
+            return getBaseVO(token);
         }
         TokenBalanceVO vo = new TokenBalanceVO();
 
@@ -110,10 +124,6 @@ public class AppUserBalanceService extends AbstractService<AppUserBalance> imple
         BigDecimal tokenBalance = NumberUtils.parseNumber(value.split("#")[1], BigDecimal.class);
         vo.setTokenId(tokenId);
         vo.setValue(tokenBalance);
-        CommonToken token = commonTokenService.findById(vo.getTokenId());
-        if (null == token) {
-            return null;
-        }
         CommonTokenPrice tokenPrice = commonTokenPriceService.findById(vo.getTokenId());
         vo.setRatio(null == tokenPrice ? BigDecimal.ZERO : tokenPrice.getTokenPrice());
         vo.setTokenName(token.getTokenName());
