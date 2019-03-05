@@ -44,7 +44,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.math.RoundingMode;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -378,7 +377,7 @@ public class EthService extends BlockService {
     }
 
     private Boolean isEthTransfer(final Transaction tx) {
-        if (null != tx.getInput() &&"0x".equals( tx.getInput())) {
+        if (null != tx.getInput() && "0x".equals(tx.getInput())) {
             return true;
         }
         return false;
@@ -515,7 +514,7 @@ public class EthService extends BlockService {
         EthSendTransaction result = web3j.ethSendRawTransaction(hexValue).send();
     }
 
-    public BigDecimal getAddressBalance(String address, String tokenName){
+    public BigDecimal getAddressBalance(String address, String tokenName) {
         CommonToken token = commonTokenService.findOneBy("tokenName", tokenName);
         if (null == token) {
             return BigDecimal.ZERO;

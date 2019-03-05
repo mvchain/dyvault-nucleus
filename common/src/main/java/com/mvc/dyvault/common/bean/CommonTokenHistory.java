@@ -1,10 +1,8 @@
 package com.mvc.dyvault.common.bean;
 
 import lombok.Data;
-import lombok.Generated;
 
 import javax.persistence.Column;
-import lombok.Data;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -21,11 +19,10 @@ public class CommonTokenHistory implements Serializable {
     private static final long serialVersionUID = -6330252943851673476L;
 
     @Id
-
     @Column(name = "id")
     private BigInteger id;
 
-    @Column(name = "token_id")
+    @Column(name = "token_id", updatable = false)
     private BigInteger tokenId;
 
     @Column(name = "created_at")

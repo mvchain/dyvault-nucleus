@@ -19,7 +19,7 @@ public class BlockTransaction implements Serializable {
      * 区块链交易记录
      */
     @Id
-    @Column(name = "id")
+    @Column(name = "id", unique = false)
     private BigInteger id;
 
     /**

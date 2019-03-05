@@ -80,7 +80,7 @@ public class AppMessage implements Serializable {
     /**
      * 推送目标用户id，位0则不区分用户，为系统推送
      */
-    @Column(name = "user_id")
+    @Column(name = "user_id", updatable = false)
     private BigInteger userId;
 
     /**

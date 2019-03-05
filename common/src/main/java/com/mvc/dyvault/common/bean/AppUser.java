@@ -1,10 +1,12 @@
 package com.mvc.dyvault.common.bean;
 
+import com.mvc.dyvault.common.swaggermock.IgnoreUpdate;
 import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.math.BigInteger;
 
@@ -13,12 +15,13 @@ import java.math.BigInteger;
  */
 @Table(name = "app_user")
 @Data
+@IgnoreUpdate(value = "id")
 public class AppUser implements Serializable {
     /**
      * 用户id
      */
     @Id
-    @Column(name = "id")
+    @Column(name = "id", updatable = false)
     private BigInteger id;
 
     /**

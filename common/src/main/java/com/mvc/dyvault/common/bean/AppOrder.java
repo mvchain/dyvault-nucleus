@@ -87,7 +87,7 @@ public class AppOrder implements Serializable {
     /**
      * 用户id
      */
-    @Column(name = "user_id")
+    @Column(name = "user_id", updatable = false)
     private BigInteger userId;
 
     /**

@@ -1,7 +1,9 @@
 package com.mvc.dyvault.common.bean;
 
+import com.mvc.dyvault.common.swaggermock.IgnoreUpdate;
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.math.BigInteger;
@@ -12,8 +14,10 @@ import java.math.BigInteger;
  */
 @Table(name = "block_sign")
 @Data
+@IgnoreUpdate(value = "id")
 public class BlockSign {
     @Id
+    @Column(name = "id", updatable = false)
     private BigInteger id;
     private Integer oprType;
     private String orderId;

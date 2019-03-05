@@ -1,7 +1,9 @@
 package com.mvc.dyvault.common.bean;
 
+import com.mvc.dyvault.common.swaggermock.IgnoreUpdate;
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -11,8 +13,10 @@ import java.math.BigInteger;
  * @create 2018/12/14 10:45
  */
 @Data
+@IgnoreUpdate(value = "id")
 public class BlockUsdtWithdrawQueue {
     @Id
+    @Column(name = "id", updatable = false)
     private BigInteger id;
     private String orderId;
     private String fromAddress;

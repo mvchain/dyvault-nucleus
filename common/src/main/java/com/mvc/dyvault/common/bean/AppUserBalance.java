@@ -21,7 +21,7 @@ public class AppUserBalance implements Serializable {
      */
     @Id
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", updatable = false)
     private BigInteger userId;
 
     /**

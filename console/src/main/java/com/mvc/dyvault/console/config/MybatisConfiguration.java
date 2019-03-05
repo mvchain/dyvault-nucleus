@@ -2,7 +2,9 @@ package com.mvc.dyvault.console.config;
 
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.mvc.dyvault.console.service.DataChangeLastTimeInterceptor;
 import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -87,7 +89,7 @@ public class MybatisConfiguration implements EnvironmentAware {
         configuration.setMapUnderscoreToCamelCase(true);
         configuration.setUseGeneratedKeys(true);
         bean.setConfiguration(configuration);
-
+        bean.setPlugins(new Interceptor[]{new DataChangeLastTimeInterceptor()});
         try {
             return bean.getObject();
         } catch (Exception e) {
