@@ -21,7 +21,7 @@ public class CommonAddress implements Serializable {
     private static final long serialVersionUID = -7228504157787988027L;
 
     @Id
-    @Column(name = "id", updatable = false)
+    @Column(name = "id", insertable = false)
     private BigInteger id;
     private String tokenType;
     private String address;

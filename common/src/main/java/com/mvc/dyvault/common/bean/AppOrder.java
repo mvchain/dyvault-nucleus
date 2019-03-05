@@ -20,7 +20,7 @@ public class AppOrder implements Serializable {
      * 订单id，内部展示
      */
     @Id
-    @Column(name = "id")
+    @Column(name = "id", insertable = false)
     private BigInteger id;
 
     /**

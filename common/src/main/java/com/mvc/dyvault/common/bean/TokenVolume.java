@@ -17,7 +17,7 @@ import java.math.BigInteger;
 public class TokenVolume {
 
     @Id
-    @Column(name = "id", updatable = false)
+    @Column(name = "id", insertable = false)
     private BigInteger id;
     private BigInteger tokenId;
     private BigDecimal value;

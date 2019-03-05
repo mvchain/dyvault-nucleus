@@ -19,7 +19,7 @@ public class CommonTokenPrice implements Serializable {
      * 令牌id
      */
     @Id
-    @Column(name = "token_id")
+    @Column(name = "token_id", insertable = false)
     private BigInteger tokenId;
     /**
      * 令牌名称

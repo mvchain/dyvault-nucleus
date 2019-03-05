@@ -3,6 +3,7 @@ package com.mvc.dyvault.common.bean;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
 
 /**
@@ -14,6 +15,7 @@ public class AppInfo {
 
     @Id
     @ApiModelProperty("apk或ipa")
+    @Column(insertable = false)
     private String appType;
     @ApiModelProperty("版本号")
     private String appVersion;

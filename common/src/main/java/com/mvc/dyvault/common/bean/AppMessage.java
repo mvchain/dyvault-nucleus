@@ -20,7 +20,7 @@ public class AppMessage implements Serializable {
      * 消息id
      */
     @Id
-    @Column(name = "id")
+    @Column(name = "id", insertable = false)
     private BigInteger id;
 
     /**

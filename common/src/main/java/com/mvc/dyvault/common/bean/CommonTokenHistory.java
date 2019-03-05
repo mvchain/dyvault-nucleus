@@ -19,7 +19,7 @@ public class CommonTokenHistory implements Serializable {
     private static final long serialVersionUID = -6330252943851673476L;
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", insertable = false)
     private BigInteger id;
 
     @Column(name = "token_id", updatable = false)

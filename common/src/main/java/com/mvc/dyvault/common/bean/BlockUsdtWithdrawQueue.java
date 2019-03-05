@@ -16,7 +16,7 @@ import java.math.BigInteger;
 @IgnoreUpdate(value = "id")
 public class BlockUsdtWithdrawQueue {
     @Id
-    @Column(name = "id", updatable = false)
+    @Column(name = "id", insertable = false)
     private BigInteger id;
     private String orderId;
     private String fromAddress;

@@ -18,8 +18,7 @@ public class AdminUser implements Serializable {
      *
      */
     @Id
-
-    @Column(name = "id")
+    @Column(name = "id", insertable = false)
     private BigInteger id;
 
     /**

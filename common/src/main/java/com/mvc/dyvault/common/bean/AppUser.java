@@ -21,7 +21,7 @@ public class AppUser implements Serializable {
      * 用户id
      */
     @Id
-    @Column(name = "id", updatable = false)
+    @Column(name = "id", insertable = false)
     private BigInteger id;
 
     /**

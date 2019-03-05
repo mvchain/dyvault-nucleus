@@ -17,7 +17,7 @@ import java.math.BigInteger;
 @IgnoreUpdate(value = "id")
 public class BlockSign {
     @Id
-    @Column(name = "id", updatable = false)
+    @Column(name = "id", insertable = false)
     private BigInteger id;
     private Integer oprType;
     private String orderId;
