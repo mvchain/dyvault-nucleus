@@ -32,22 +32,27 @@ public class DataChangeLastTimeInterceptor implements Interceptor {
      */
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
-        Object[] args = invocation.getArgs();
-        MappedStatement ms = (MappedStatement) args[0];
-        Object parameter = args[1];
-        Executor executor = (Executor) invocation.getTarget();
-        BoundSql boundSql = ms.getBoundSql(parameter);
-        String sql = boundSql.getSql();
-        IgnoreUpdate ann = parameter.getClass().getAnnotation(IgnoreUpdate.class);
-        if (null != ann) {
-            sql = sql.replace(ann.value() + " = " + ann.value() + ",", "");
+        if(METHOD_UPDATE .equalsIgnoreCase(invocation.getMethod().getName())){
+            Object[] args = invocation.getArgs();
+            MappedStatement ms = (MappedStatement) args[0];
+            Object parameter = args[1];
+            Executor executor = (Executor) invocation.getTarget();
+            BoundSql boundSql = ms.getBoundSql(parameter);
+            String sql = boundSql.getSql();
+            IgnoreUpdate ann = parameter.getClass().getAnnotation(IgnoreUpdate.class);
+            if (null != ann) {
+                sql = sql.replace(ann.value() + " = " + ann.value() + ",", "");
+            }
+            PreparedStatement stat = executor.getTransaction().getConnection().prepareStatement(sql);
+            for (int i = 0; i < boundSql.getParameterMappings().size(); i++) {
+                Object value = FieldUtils.readDeclaredField(parameter, boundSql.getParameterMappings().get(i).getProperty(), true);
+                stat.setObject(i + 1, value);
+            }
+            return stat.executeUpdate();
+        } else{
+         return    invocation.proceed();
         }
-        PreparedStatement stat = executor.getTransaction().getConnection().prepareStatement(sql);
-        for (int i = 0; i < boundSql.getParameterMappings().size(); i++) {
-            Object value = FieldUtils.readDeclaredField(parameter, boundSql.getParameterMappings().get(i).getProperty(), true);
-            stat.setObject(i + 1, value);
-        }
-        return stat.executeUpdate();
+
     }
 
     @Override
