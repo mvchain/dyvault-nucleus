@@ -225,4 +225,17 @@ public class UserController extends BaseController {
         return new Result<>(true);
     }
 
+    @ApiOperation("获取用户盐")
+    @PostMapping("salt")
+    @NotLogin
+    public Result<String> getSalt(@RequestParam String email) {
+        AppUser user = userService.getUserByUsername(email);
+        if (null == user) {
+            return new Result<>("");
+        } else {
+            String salt = userService.getSalt(user.getId());
+            return new Result<>(salt);
+        }
+    }
+
 }
