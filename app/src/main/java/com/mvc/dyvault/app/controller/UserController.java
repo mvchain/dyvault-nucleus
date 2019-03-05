@@ -4,10 +4,7 @@ import com.mvc.dyvault.app.service.MailService;
 import com.mvc.dyvault.app.util.GeetestLib;
 import com.mvc.dyvault.common.bean.AppUser;
 import com.mvc.dyvault.common.bean.dto.*;
-import com.mvc.dyvault.common.bean.vo.Result;
-import com.mvc.dyvault.common.bean.vo.TokenVO;
-import com.mvc.dyvault.common.bean.vo.UserSimpleVO;
-import com.mvc.dyvault.common.bean.vo.ValidVO;
+import com.mvc.dyvault.common.bean.vo.*;
 import com.mvc.dyvault.common.constant.RedisConstant;
 import com.mvc.dyvault.common.permission.NotLogin;
 import com.mvc.dyvault.common.swaggermock.SwaggerMock;
@@ -211,12 +208,13 @@ public class UserController extends BaseController {
 
     @ApiOperation("校验邮箱状态(修改密码时第一步校验)")
     @PostMapping("email")
-    public Result<String> checkEmail(@RequestBody AppUserEmailDTO appUserEmailDTO) {
+    public Result<EmailTokenVO> checkEmail(@RequestBody AppUserEmailDTO appUserEmailDTO) {
         String email = userService.getEmail(getUserId());
+        String salt = userService.getSalt(getUserId());
         Boolean result = mailService.checkSmsValiCode(email, appUserEmailDTO.getValidCode());
         Assert.isTrue(result, MessageConstants.getMsg("SMS_ERROR"));
         String token = JwtHelper.create(email, getUserId(), "email");
-        return new Result<>(token);
+        return new Result<>(new EmailTokenVO(salt, token));
     }
 
     @ApiOperation("发送验证码(不输入邮箱地址,直接取当前用户注册邮箱)")

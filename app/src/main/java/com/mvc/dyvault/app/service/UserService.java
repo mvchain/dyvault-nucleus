@@ -69,6 +69,7 @@ public class UserService {
         vo.setToken(token);
         vo.setUserId(user.getId());
         vo.setEmail(user.getEmail());
+        vo.setSalt(user.getSalt());
         return vo;
     }
 
@@ -183,5 +184,11 @@ public class UserService {
         Result<AppUser> userResult = userRemoteService.getUserById(userId);
         AppUser user = userResult.getData();
         return user.getEmail();
+    }
+
+    public String getSalt(BigInteger userId) {
+        Result<AppUser> userResult = userRemoteService.getUserById(userId);
+        AppUser user = userResult.getData();
+        return user.getSalt();
     }
 }

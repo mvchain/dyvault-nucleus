@@ -20,5 +20,7 @@ public class TokenVO implements Serializable {
     private String token;
     private String refreshToken;
     private String email;
+    @ApiModelProperty("salt")
+    private String salt;
 
 }

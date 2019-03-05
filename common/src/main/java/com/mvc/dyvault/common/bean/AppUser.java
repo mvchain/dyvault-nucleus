@@ -59,6 +59,7 @@ public class AppUser implements Serializable {
      */
     @Column(name = "created_at")
     private Long createdAt;
+    private String salt;
 
     /**
      * 更新时间

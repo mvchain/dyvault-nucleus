@@ -1,11 +1,9 @@
 package com.mvc.dyvault.common.bean.dto;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
@@ -31,4 +29,8 @@ public class AppUserDTO implements Serializable {
     private String transactionPassword;
     @ApiModelProperty("token")
     private String token;
+    @ApiModelProperty("salt")
+    @NotNull
+    private String salt;
+
 }

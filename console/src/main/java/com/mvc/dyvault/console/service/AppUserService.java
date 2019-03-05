@@ -105,6 +105,7 @@ public class AppUserService extends AbstractService<AppUser> implements BaseServ
         appUser.setInviteNum(0);
         appUser.setEmail(appUserDTO.getEmail());
         appUser.setPassword(appUserDTO.getPassword());
+        appUser.setSalt(appUserDTO.getSalt());
         appUser.setInviteLevel(0);
         appUser.setTransactionPassword(appUserDTO.getTransactionPassword());
         String code = getCode();
