@@ -68,10 +68,11 @@ public class BlockTransactionService extends AbstractService<BlockTransaction> i
         if (null != address && !address.getUserId().equals(BigInteger.ZERO)) {
             //inner
             AppUser user = appUserService.findById(userId);
+            AppUser targetUser = appUserService.findById(address.getUserId());
             String tokenName = token.getTokenName();
             appUserBalanceService.updateBalance(address.getUserId(), transactionDTO.getTokenId(), transactionDTO.getValue());
-            orderService.saveOrder(5, user.getEmail(), transactionDTO.getAddress(), transactionDTO.getTokenId(), transactionDTO.getValue(), userId, tokenName, 2);
-            orderService.saveOrder(5, user.getEmail(), transactionDTO.getAddress(), transactionDTO.getTokenId(), transactionDTO.getValue(), address.getUserId(), tokenName, 1);
+            orderService.saveOrder(5, user.getNickname(), targetUser.getNickname(), transactionDTO.getTokenId(), transactionDTO.getValue(), userId, tokenName, 2);
+            orderService.saveOrder(5, user.getNickname(), targetUser.getNickname(), transactionDTO.getTokenId(), transactionDTO.getValue(), address.getUserId(), tokenName, 1);
         } else {
             saveBlockTrans(userId, transactionDTO, now);
         }
