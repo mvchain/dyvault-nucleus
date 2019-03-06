@@ -39,6 +39,8 @@ INSERT INTO MYCAT_SEQUENCE(name,current_value,increment) VALUES ('token_volume',
 INSERT INTO MYCAT_SEQUENCE(name,current_value,increment) VALUES ('app_user_financial_income', 100000, 1);
 INSERT INTO MYCAT_SEQUENCE(name,current_value,increment) VALUES ('app_user_financial_partake', 100000, 1);
 INSERT INTO MYCAT_SEQUENCE(name,current_value,increment) VALUES ('app_financial', 100000, 1);
+INSERT INTO MYCAT_SEQUENCE(name,current_value,increment) VALUES ('app_info', 100000, 1);
+INSERT INTO MYCAT_SEQUENCE(name,current_value,increment) VALUES ('app_channel', 100000, 1);
 
 #创建相关 function
 #获取当前 sequence 的值 (返回当前值,增量)

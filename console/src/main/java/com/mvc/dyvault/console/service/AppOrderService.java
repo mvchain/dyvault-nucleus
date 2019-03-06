@@ -81,6 +81,9 @@ public class AppOrderService extends AbstractService<AppOrder> implements BaseSe
         Example.Criteria criteria = condition.createCriteria();
         ConditionUtil.andCondition(criteria, "user_id = ", userId);
         ConditionUtil.andCondition(criteria, "token_id = ", transactionSearchDTO.getTokenId());
+        if(null != transactionSearchDTO.getTransactionType() && 0!= transactionSearchDTO.getTransactionType()){
+            ConditionUtil.andCondition(criteria, "order_type = ", transactionSearchDTO.getTransactionType());
+        }
         PageHelper.startPage(1, transactionSearchDTO.getPageSize());
         PageHelper.orderBy("id desc");
         if (null != transactionSearchDTO.getId() && !transactionSearchDTO.getId().equals(BigInteger.ZERO)) {
@@ -259,11 +262,11 @@ public class AppOrderService extends AbstractService<AppOrder> implements BaseSe
         appMessageService.transferMsg(appOrder.getId(), appOrder.getUserId(), message, sendMsg);
     }
 
-    public void saveOrder(String from, String to, BigInteger tokenId, BigDecimal value, BigInteger userId, String tokenName, Integer orderType) {
+    public void saveOrder(Integer classify,  String from, String to, BigInteger tokenId, BigDecimal value, BigInteger userId, String tokenName, Integer orderType) {
         CommonToken token = tokenService.findById(tokenId);
         Long time = System.currentTimeMillis();
         AppOrder appOrder = new AppOrder();
-        appOrder.setClassify(0);
+        appOrder.setClassify(classify);
         appOrder.setCreatedAt(time);
         appOrder.setUpdatedAt(time);
         appOrder.setFromAddress(from);

@@ -36,22 +36,22 @@ public class AppController extends BaseController {
     @PostMapping("")
     @ApiOperation("设置当前更新信息")
     public Result<Boolean> readApp(@RequestBody MultipartFile file, @RequestParam String httpUrl) {
-        String name = file.getOriginalFilename();
-        AppInfo appInfo = null;
-        name = name.toUpperCase();
-        try {
-            @Cleanup InputStream in = file.getInputStream();
-            if (name.endsWith("APK")) {
-                appInfo = ReadUtil.readAPK(in);
-            } else {
-                appInfo = ReadUtil.readIPA(in);
-            }
-            Assert.notNull(appInfo, "文件解析失败");
-            appInfo.setHttpUrl(httpUrl);
-            appService.saveApp(appInfo);
-        } catch (Exception e) {
-            return new Result<>(false);
-        }
+//        String name = file.getOriginalFilename();
+//        AppInfo appInfo = null;
+//        name = name.toUpperCase();
+//        try {
+//            @Cleanup InputStream in = file.getInputStream();
+//            if (name.endsWith("APK")) {
+//                appInfo = ReadUtil.readAPK(in);
+//            } else {
+//                appInfo = ReadUtil.readIPA(in);
+//            }
+//            Assert.notNull(appInfo, "文件解析失败");
+//            appInfo.setHttpUrl(httpUrl);
+//            appService.saveApp(appInfo);
+//        } catch (Exception e) {
+//            return new Result<>(false);
+//        }
         return new Result<>(true);
     }
 

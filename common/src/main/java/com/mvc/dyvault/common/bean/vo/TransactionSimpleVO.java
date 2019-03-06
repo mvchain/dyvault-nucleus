@@ -37,4 +37,9 @@ public class TransactionSimpleVO {
     private BigInteger id;
     @ApiModelProperty("备注字段,如众筹项目类型则为项目名称,交易则为交易对名称")
     private String orderRemark;
+    @ApiModelProperty("目标地址")
+    private String toAddress;
+    @ApiModelProperty("转出地址")
+    private String fromAddress;
+
 }

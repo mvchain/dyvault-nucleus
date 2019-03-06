@@ -63,15 +63,15 @@ public class BlockTransactionService extends AbstractService<BlockTransaction> i
         //扣除平台手续费
         appUserBalanceService.updateBalance(userId, transactionDTO.getTokenId(), BigDecimal.ZERO.subtract(BigDecimal.valueOf(token.getFee())));
         if (null != token.getFee() && token.getFee() > 0) {
-            orderService.saveOrder(transactionDTO.getAddress(), transactionDTO.getAddress(), transactionDTO.getTokenId(), BigDecimal.valueOf(token.getFee()), userId, "手续费支出", 2);
+            orderService.saveOrder(0, transactionDTO.getAddress(), transactionDTO.getAddress(), transactionDTO.getTokenId(), BigDecimal.valueOf(token.getFee()), userId, "手续费支出", 2);
         }
         if (null != address && !address.getUserId().equals(BigInteger.ZERO)) {
             //inner
-            String userAddress = appUserAddressService.getAddress(userId, transactionDTO.getTokenId());
+            AppUser user = appUserService.findById(userId);
             String tokenName = token.getTokenName();
             appUserBalanceService.updateBalance(address.getUserId(), transactionDTO.getTokenId(), transactionDTO.getValue());
-            orderService.saveOrder(userAddress, transactionDTO.getAddress(), transactionDTO.getTokenId(), transactionDTO.getValue(), userId, tokenName, 2);
-            orderService.saveOrder(userAddress, transactionDTO.getAddress(), transactionDTO.getTokenId(), transactionDTO.getValue(), address.getUserId(), tokenName, 1);
+            orderService.saveOrder(5, user.getEmail(), transactionDTO.getAddress(), transactionDTO.getTokenId(), transactionDTO.getValue(), userId, tokenName, 2);
+            orderService.saveOrder(5, user.getEmail(), transactionDTO.getAddress(), transactionDTO.getTokenId(), transactionDTO.getValue(), address.getUserId(), tokenName, 1);
         } else {
             saveBlockTrans(userId, transactionDTO, now);
         }
