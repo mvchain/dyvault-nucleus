@@ -59,4 +59,7 @@ public class TransactionDetailVO {
 
     @ApiModelProperty("区块高度")
     private BigInteger height;
+
+    @ApiModelProperty("order number")
+    private String orderNumber;
 }

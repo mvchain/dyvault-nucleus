@@ -139,7 +139,7 @@ CREATE TABLE `app_user` (
   `email` varchar(128) DEFAULT NULL COMMENT '邮箱地址',
   `pv_key` varchar(128) DEFAULT NULL COMMENT '私钥',
   `invite_num` int(11) DEFAULT NULL COMMENT '邀请数量',
-  `salt` varchar(16) DEFAULT NULL,
+  `salt` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_app_user_1` (`email`) USING BTREE,
   KEY `index_app_user_2` (`nickname`) USING BTREE,
