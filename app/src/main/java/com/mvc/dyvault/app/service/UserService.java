@@ -136,6 +136,7 @@ public class UserService {
         vo.setToken(token);
         vo.setUserId(user.getData().getId());
         vo.setEmail(user.getData().getEmail());
+        vo.setSalt(appUserDTO.getSalt());
         return vo;
     }
 
