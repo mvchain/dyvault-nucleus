@@ -124,7 +124,7 @@ public class BtcService extends BlockService {
             transaction.setCreatedAt(time);
             transaction.setUpdatedAt(time);
             transaction.setHash(tx.getTxId());
-            transaction.setValue(obj.getAmount());
+            transaction.setValue(obj.getAmount().abs());
             transaction.setOprType(BigInteger.ZERO.equals(address.getUserId()) ? 9 : 1);
             transaction.setErrorData("");
             transaction.setErrorMsg("");

@@ -219,7 +219,7 @@ public class UsdtService extends BlockService {
         transaction.setUpdatedAt(time);
         transaction.setTokenType("BTC");
         transaction.setCreatedAt(time);
-        transaction.setValue(value);
+        transaction.setValue(value.abs());
         transaction.setUserId(address.getUserId());
         transaction.setOrderNumber("");
         transaction.setFee(new BigDecimal(tx.getFee()));
