@@ -154,15 +154,13 @@ public class DAdminUserController extends BaseController {
             count = blockHeightService.accountCount("BTC");
             addressCold = adminWalletService.getAddress(2, 0);
             addressHot = adminWalletService.getAddress(2, 1);
-            balanceHot = BtcAction.getTetherBalance(addressHot).getBalance();
+            balanceHot = BigDecimal.ZERO;
             balanceCold = BtcAction.getTetherBalance(addressCold).getBalance();
         } else if (tokenId.equals(BusinessConstant.BASE_TOKEN_ID_BTC)) {
             count = blockHeightService.accountCount("BTC");
             addressCold = adminWalletService.getAddress(2, 0);
-            addressHot = adminWalletService.getAddress(2, 1);
-            List<Output> hotUnspent = BtcAction.listUnspent(Arrays.asList(addressHot));
             List<Output> coldUnspent = BtcAction.listUnspent(Arrays.asList(addressCold));
-            balanceHot = hotUnspent.stream().map(obj -> obj.getAmount()).reduce(BigDecimal.ZERO, BigDecimal::add);
+            balanceHot = BigDecimal.ZERO;
             balanceCold = coldUnspent.stream().map(obj -> obj.getAmount()).reduce(BigDecimal.ZERO, BigDecimal::add);
         } else {
             count = blockHeightService.accountCount("ETH");
