@@ -84,8 +84,8 @@ public class AppMessageService {
 
     public void transferMsg(BigInteger id, BigInteger userId, String message, Boolean send) {
         if (send) {
-            Boolean result = jPushService.send(message, id, String.valueOf(userId));
-            saveMsg(userId, result, id, message);
+//            Boolean result = jPushService.send(message, id, String.valueOf(userId));
+            saveMsg(userId, true, id, message);
         } else {
             saveMsg(userId, false, id, message);
         }

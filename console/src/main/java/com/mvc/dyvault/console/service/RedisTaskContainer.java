@@ -39,6 +39,7 @@ public class RedisTaskContainer {
                 BlockTransactionBO blockTransactionBO = JSON.parseObject(data, BlockTransactionBO.class);
                 blockTransactionService.doSendTransaction(blockTransactionBO.getUserId(), blockTransactionBO.getTransactionDTO());
             } catch (Exception e) {
+                e.printStackTrace();
                 logger.error(e.getMessage());
             }
 
