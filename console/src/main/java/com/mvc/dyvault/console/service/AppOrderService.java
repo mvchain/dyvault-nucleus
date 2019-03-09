@@ -97,11 +97,7 @@ public class AppOrderService extends AbstractService<AppOrder> implements BaseSe
             CommonTokenPrice price = commonTokenPriceService.findById(token.getId());
             TransactionSimpleVO vo = new TransactionSimpleVO();
             BeanUtils.copyProperties(obj, vo);
-            if ("手续费支出".equalsIgnoreCase(vo.getOrderRemark())) {
-                vo.setValue(null == obj.getFee().abs() ? BigDecimal.ZERO : obj.getFee().abs());
-            } else {
-                vo.setValue(vo.getValue().abs());
-            }
+            vo.setValue(vo.getValue().abs());
             vo.setTokenName(token.getTokenName());
             vo.setRatio(null == price ? BigDecimal.ZERO : price.getTokenPrice());
             vo.setTransactionType(obj.getOrderType());

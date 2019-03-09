@@ -71,7 +71,7 @@ public class BlockTransactionService extends AbstractService<BlockTransaction> i
             String tokenName = token.getTokenName();
             appUserBalanceService.updateBalance(address.getUserId(), transactionDTO.getTokenId(), transactionDTO.getValue());
             orderService.saveOrder(5, user.getNickname(), targetUser.getNickname(), transactionDTO.getTokenId(), transactionDTO.getValue(), userId, tokenName, 2);
-            orderService.saveOrder(5, user.getNickname(), targetUser.getNickname(), transactionDTO.getTokenId(), transactionDTO.getValue(), address.getUserId(), tokenName, 1);
+            orderService.saveOrder(5, user.getNickname(), targetUser.getNickname(), transactionDTO.getTokenId(), transactionDTO.getValue(), targetUser.getId(), tokenName, 1);
         } else {
             saveBlockTrans(userId, transactionDTO, now);
         }
@@ -111,13 +111,6 @@ public class BlockTransactionService extends AbstractService<BlockTransaction> i
         appOrder.setFee(BigDecimal.valueOf(token.getFee()));
         appOrder.setOrderType(2);
         orderService.save(appOrder);
-        if (null != token.getFee() && token.getFee() > 0) {
-            AppOrder feeOrder = new AppOrder();
-            BeanUtils.copyProperties(appOrder, feeOrder);
-            feeOrder.setId(null);
-            feeOrder.setOrderRemark("手续费支出");
-            orderService.save(appOrder);
-        }
     }
 
     public void sendTransaction(BigInteger userId, TransactionDTO transactionDTO) {
