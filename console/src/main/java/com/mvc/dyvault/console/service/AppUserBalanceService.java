@@ -97,7 +97,7 @@ public class AppUserBalanceService extends AbstractService<AppUserBalance> imple
         return balance;
     }
 
-    private TokenBalanceVO getBaseVO(CommonToken token){
+    private TokenBalanceVO getBaseVO(CommonToken token) {
         TokenBalanceVO vo = new TokenBalanceVO();
         vo.setTokenId(token.getId());
         vo.setValue(BigDecimal.ZERO);
@@ -163,11 +163,13 @@ public class AppUserBalanceService extends AbstractService<AppUserBalance> imple
             vo.setRatio(null == tokenPrice ? BigDecimal.ZERO : tokenPrice.getTokenPrice());
             vo.setTokenName(token.getTokenName());
             vo.setTokenImage(token.getTokenImage());
-            if (visible == 1 || ignoreHide || token.getId().compareTo(BusinessConstant.BASE_TOKEN_ID_USDT) <= 0) {
+            if (visible == 1 || ignoreHide) {
                 result.add(vo);
             }
         }
         initDefault(map, BusinessConstant.BASE_TOKEN_ID_USDT, result);
+        initDefault(map, BusinessConstant.BASE_TOKEN_ID_ETH, result);
+        initDefault(map, BusinessConstant.BASE_TOKEN_ID_BTC, result);
         Collections.sort(result, comparator);
         return result;
     }

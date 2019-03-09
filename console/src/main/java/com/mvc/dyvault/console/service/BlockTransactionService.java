@@ -61,9 +61,8 @@ public class BlockTransactionService extends AbstractService<BlockTransaction> i
         CommonAddress address = commonAddressService.findOneBy("address", transactionDTO.getAddress());
         CommonToken token = tokenService.findById(transactionDTO.getTokenId());
         //扣除平台手续费
-        appUserBalanceService.updateBalance(userId, transactionDTO.getTokenId(), BigDecimal.ZERO.subtract(BigDecimal.valueOf(token.getFee())));
-        if (null != token.getFee() && token.getFee() > 0) {
-            orderService.saveOrder(0, transactionDTO.getAddress(), transactionDTO.getAddress(), transactionDTO.getTokenId(), BigDecimal.valueOf(token.getFee()), userId, "手续费支出", 2);
+        if (!isInner(transactionDTO.getAddress())) {
+            appUserBalanceService.updateBalance(userId, transactionDTO.getTokenId(), BigDecimal.ZERO.subtract(BigDecimal.valueOf(token.getFee())));
         }
         if (null != address && !address.getUserId().equals(BigInteger.ZERO)) {
             //inner
@@ -137,14 +136,26 @@ public class BlockTransactionService extends AbstractService<BlockTransaction> i
         appUserBalanceService.updateBalance(userId, transactionDTO.getTokenId(), BigDecimal.ZERO.subtract(transactionDTO.getValue()));
     }
 
+    public boolean isInner(String address) {
+        if (address.indexOf("@") > 0) {
+            AppUser user = appUserService.findOneBy("email", address);
+            return null != user;
+        } else {
+            CommonAddress innerAddress = commonAddressService.findOneBy("address", address);
+            return null != innerAddress;
+        }
+    }
+
     private void checkTransaction(BigInteger userId, TransactionDTO transactionDTO) {
         //校验密码是否正确
         AppUser user = appUserService.findById(userId);
         Assert.isTrue(transactionDTO.getPassword().equalsIgnoreCase(user.getTransactionPassword()), MessageConstants.getMsg("USER_TRANS_PASS_WRONG"));
-        //校验手续费是否足够
-        CommonToken token = tokenService.findById(transactionDTO.getTokenId());
-        BigDecimal feeBalance = appUserBalanceService.getBalanceByTokenId(userId, transactionDTO.getTokenId());
-        Assert.isTrue(feeBalance.compareTo(BigDecimal.valueOf(token.getFee())) >= 0, MessageConstants.getMsg("INSUFFICIENT_BALANCE"));
+        //校验手续费是否足够,内部转账不需要手续费
+        if (!isInner(transactionDTO.getAddress())) {
+            CommonToken token = tokenService.findById(transactionDTO.getTokenId());
+            BigDecimal feeBalance = appUserBalanceService.getBalanceByTokenId(userId, transactionDTO.getTokenId());
+            Assert.isTrue(feeBalance.compareTo(BigDecimal.valueOf(token.getFee())) >= 0, MessageConstants.getMsg("INSUFFICIENT_BALANCE"));
+        }
         //校验余额是否足够
         BigDecimal balance = appUserBalanceService.getBalanceByTokenId(userId, transactionDTO.getTokenId());
         Assert.isTrue(balance.compareTo(transactionDTO.getValue()) >= 0, MessageConstants.getMsg("INSUFFICIENT_BALANCE"));

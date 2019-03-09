@@ -64,6 +64,11 @@ public class BtcAction {
         return getBtcBalance(unspent);
     }
 
+    public static BigDecimal getBtcBalance(String address, Integer minConfirmations) throws BitcoindException, CommunicationException {
+        List<Output> unspent = btcdClient.listUnspent(minConfirmations, Integer.MAX_VALUE, Arrays.asList(address));
+        return getBtcBalance(unspent);
+    }
+
     public static BigDecimal getBtcBalance(List<Output> unspent) {
         return unspent.stream().map(obj -> obj.getAmount()).reduce(BigDecimal.ZERO, BigDecimal::add);
     }

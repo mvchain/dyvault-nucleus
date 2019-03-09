@@ -249,8 +249,8 @@ public class BtcService extends BlockService {
             }
             blockTransactionService.updateSuccess(obj);
             try {
-                updateAddressBalance(obj.getTokenId(), obj.getFromAddress(), BtcAction.getBtcBalance(obj.getFromAddress()));
-                updateAddressBalance(obj.getTokenId(), obj.getToAddress(), BtcAction.getBtcBalance(obj.getToAddress()));
+                updateAddressBalance(obj.getTokenId(), obj.getFromAddress(), BtcAction.getBtcBalance(obj.getFromAddress(), 0));
+                updateAddressBalance(obj.getTokenId(), obj.getToAddress(), BtcAction.getBtcBalance(obj.getToAddress(), 0));
             } catch (Exception e) {
                 log.warn(e.getMessage());
             }

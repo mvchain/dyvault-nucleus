@@ -44,6 +44,9 @@ public interface ConsoleRemoteService {
     @GetMapping("appUserAddress/{userId}")
     Result<String> getAddress(@PathVariable("userId") BigInteger userId, @RequestParam("tokenId") BigInteger tokenId);
 
+    @GetMapping("appUserAddress/address")
+    Result<Boolean> isInner(@RequestParam("address") String address);
+
     @GetMapping("commonToken/transactionInfo")
     Result<TransactionTokenVO> getTransactionInfo(@RequestParam("userId") BigInteger userId, @RequestParam("tokenId") BigInteger tokenId);
 

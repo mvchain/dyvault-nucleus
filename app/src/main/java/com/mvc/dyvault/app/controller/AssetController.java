@@ -79,6 +79,13 @@ public class AssetController extends BaseController {
         return new Result<>(assetService.getAddress(getUserId(), tokenId));
     }
 
+    @ApiOperation("Verify if the internal address")
+    @GetMapping("inner")
+    @SwaggerMock("${asset.address}")
+    public Result<Boolean> getAddress(@RequestParam String address) {
+        return new Result<>(assetService.isInner(address));
+    }
+
     @ApiOperation("传入币种id取转账所需信息，不区分大小写")
     @GetMapping("transaction")
     @SwaggerMock("${asset.transactionInfo}")

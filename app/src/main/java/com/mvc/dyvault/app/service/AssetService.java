@@ -52,6 +52,11 @@ public class AssetService {
         return result.getData();
     }
 
+    public Boolean isInner(String address) {
+        Result<Boolean> result = consoleRemoteService.isInner(address);
+        return result.getData();
+    }
+
     public TransactionTokenVO getTransactionInfo(BigInteger userId, BigInteger tokenId) {
         Result<TransactionTokenVO> result = consoleRemoteService.getTransactionInfo(userId, tokenId);
         return result.getData();
