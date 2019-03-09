@@ -42,8 +42,6 @@ public class BtcService extends BlockService {
 
     @Autowired
     BtcdClient btcdClient;
-    @Autowired
-    BlockSignService blockSignService;
     private static String nowHash = "";
     private AdminWallet hotWallet = null;
     @Autowired

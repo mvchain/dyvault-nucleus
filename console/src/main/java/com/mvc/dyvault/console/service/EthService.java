@@ -65,8 +65,6 @@ public class EthService extends BlockService {
     ContractService contractService;
     @Autowired
     AdminWalletService adminWalletService;
-    @Autowired
-    BlockSignService blockSignService;
 
     /**
      * 执行transferFrom方法时发现没有approve时的等待时间

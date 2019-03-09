@@ -10,7 +10,6 @@ import com.mvc.dyvault.console.bean.Balance;
 import com.mvc.dyvault.console.bean.UsdtTransaction;
 import com.mvc.dyvault.console.constant.BusinessConstant;
 import com.mvc.dyvault.console.util.btc.BtcAction;
-import com.mvc.dyvault.console.util.btc.entity.TetherBalance;
 import com.neemre.btcdcli4j.core.BitcoindException;
 import com.neemre.btcdcli4j.core.CommunicationException;
 import com.neemre.btcdcli4j.core.client.BtcdClient;
@@ -48,8 +47,6 @@ public class UsdtService extends BlockService {
 
     @Autowired
     BtcdClient btcdClient;
-    @Autowired
-    BlockSignService blockSignService;
     @Value("${usdt.propId}")
     private Integer propId;
     private static String nowHash = "";
@@ -139,7 +136,7 @@ public class UsdtService extends BlockService {
                     blockUsdtWithdrawQueueService.update(obj);
                     blockTransactionService.updateHash(obj.getOrderId(), hash);
                 } catch (Exception e) {
-                    if ("Error #-26: 258: txn-mempool-conflict".equalsIgnoreCase(e.getMessage()) ||"No unspent on address".startsWith( e.getMessage())) {
+                    if ("Error #-26: 258: txn-mempool-conflict".equalsIgnoreCase(e.getMessage()) || "No unspent on address".startsWith(e.getMessage())) {
                         //该种错误添加到重试列表
                         obj.setStartedAt(System.currentTimeMillis() + APPROVE_WAIT);
                         blockUsdtWithdrawQueueService.update(obj);
@@ -372,7 +369,7 @@ public class UsdtService extends BlockService {
         List<BlockTransaction> blockTransaction = blockTransactionService.findByCondition(condition);
         blockTransaction.forEach(obj -> {
             blockTransactionService.updateSuccess(obj);
-            if(!obj.getTokenId().equals(BusinessConstant.BASE_TOKEN_ID_USDT)){
+            if (!obj.getTokenId().equals(BusinessConstant.BASE_TOKEN_ID_USDT)) {
                 return;
             }
             try {

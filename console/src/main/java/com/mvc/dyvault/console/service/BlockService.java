@@ -1,10 +1,7 @@
 package com.mvc.dyvault.console.service;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.mvc.dyvault.common.bean.AdminWallet;
-import com.mvc.dyvault.common.bean.BlockTransaction;
-import com.mvc.dyvault.common.bean.CommonAddress;
-import com.mvc.dyvault.common.bean.CommonToken;
+import com.mvc.dyvault.common.bean.*;
 import com.mvc.dyvault.common.util.ConditionUtil;
 import com.mvc.dyvault.console.config.SpringContextUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -35,6 +32,8 @@ public abstract class BlockService implements CommandLineRunner {
     protected StringRedisTemplate redisTemplate;
     @Autowired
     AdminWalletService adminWalletService;
+    @Autowired
+    BlockSignService blockSignService;
 
     protected static volatile ExecutorService executorService;
 
@@ -47,6 +46,10 @@ public abstract class BlockService implements CommandLineRunner {
     protected Boolean saveOrUpdate(BlockTransaction blockTransaction, String btc) {
         if (null == blockTransaction) {
             return null;
+        }
+        List<BlockSign> list = blockSignService.findBy("hash", blockTransaction.getHash());
+        if(null != list && list.size() > 0){
+            blockTransaction.setOprType(9);
         }
         Condition condition = new Condition(BlockTransaction.class);
         Example.Criteria criteria = condition.createCriteria();
@@ -64,6 +67,10 @@ public abstract class BlockService implements CommandLineRunner {
     protected Boolean saveOrUpdate(BlockTransaction blockTransaction) {
         if (null == blockTransaction) {
             return null;
+        }
+        List<BlockSign> list = blockSignService.findBy("hash", blockTransaction.getHash());
+        if(null != list && list.size() > 0){
+            blockTransaction.setOprType(9);
         }
         BlockTransaction trans = blockTransactionService.findOneBy("hash", blockTransaction.getHash());
         if (null == trans) {
