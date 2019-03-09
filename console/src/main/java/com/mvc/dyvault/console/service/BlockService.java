@@ -4,6 +4,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.mvc.dyvault.common.bean.*;
 import com.mvc.dyvault.common.util.ConditionUtil;
 import com.mvc.dyvault.console.config.SpringContextUtil;
+import com.mvc.dyvault.console.constant.BusinessConstant;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -47,9 +48,12 @@ public abstract class BlockService implements CommandLineRunner {
         if (null == blockTransaction) {
             return null;
         }
-        List<BlockSign> list = blockSignService.findBy("hash", blockTransaction.getHash());
-        if(null != list && list.size() > 0){
-            blockTransaction.setOprType(9);
+        // can not recharge btc to usdt address
+        if(blockTransaction.getOprType() == 1){
+            CommonAddress address = commonAddressService.findOneBy("address", blockTransaction.getToAddress());
+            if(null != address &&  blockTransaction.getTokenId().equals(BusinessConstant.BASE_TOKEN_ID_BTC) && address.getAddressType().equalsIgnoreCase("USDT")){
+                blockTransaction.setOprType(9);
+            }
         }
         Condition condition = new Condition(BlockTransaction.class);
         Example.Criteria criteria = condition.createCriteria();
@@ -68,9 +72,12 @@ public abstract class BlockService implements CommandLineRunner {
         if (null == blockTransaction) {
             return null;
         }
-        List<BlockSign> list = blockSignService.findBy("hash", blockTransaction.getHash());
-        if(null != list && list.size() > 0){
-            blockTransaction.setOprType(9);
+        // can not recharge btc to usdt address
+        if(blockTransaction.getOprType() == 1){
+            CommonAddress address = commonAddressService.findOneBy("address", blockTransaction.getToAddress());
+            if(null != address &&  blockTransaction.getTokenId().equals(BusinessConstant.BASE_TOKEN_ID_BTC) && address.getAddressType().equalsIgnoreCase("USDT")){
+                blockTransaction.setOprType(9);
+            }
         }
         BlockTransaction trans = blockTransactionService.findOneBy("hash", blockTransaction.getHash());
         if (null == trans) {
