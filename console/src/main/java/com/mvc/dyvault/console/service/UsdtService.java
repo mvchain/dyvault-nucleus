@@ -185,6 +185,7 @@ public class UsdtService extends BlockService {
             blockTransactionService.updateHash(sign.getOrderId(), result);
             //开始更新usdt排队列表
             blockUsdtWithdrawQueueService.start(sign.getOrderId(), sign.getToAddress());
+            updateBalance();
         } catch (Exception e) {
             if ("Error #-26: 258: txn-mempool-conflict".equalsIgnoreCase(e.getMessage())) {
                 //该种错误添加到重试列表
@@ -269,6 +270,27 @@ public class UsdtService extends BlockService {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void updateBalance() {
+        Condition condition = new Condition(CommonAddress.class);
+        Example.Criteria criteria = condition.createCriteria();
+        ConditionUtil.andCondition(criteria, "balance >", BigDecimal.ZERO);
+        ConditionUtil.andCondition(criteria, "address_type in ('BTC', 'USDT')");
+        List<CommonAddress> list = commonAddressService.findByCondition(condition);
+        for (CommonAddress commonAddress : list) {
+            try {
+                BigInteger tokenId = commonAddress.getAddressType().equalsIgnoreCase("BTC") ? BusinessConstant.BASE_TOKEN_ID_BTC : BusinessConstant.BASE_TOKEN_ID_USDT;
+                if (tokenId.equals(BusinessConstant.BASE_TOKEN_ID_USDT)) {
+                    updateAddressBalance(tokenId, commonAddress.getAddress(), BtcAction.getTetherBalance(commonAddress.getAddress()).getBalance());
+                } else {
+                    updateAddressBalance(tokenId, commonAddress.getAddress(), BtcAction.getBtcBalance(commonAddress.getAddress()));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     private void readTxList(List<String> txList) {
