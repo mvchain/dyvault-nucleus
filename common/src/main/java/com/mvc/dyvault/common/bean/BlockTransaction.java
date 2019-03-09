@@ -1,5 +1,6 @@
 package com.mvc.dyvault.common.bean;
 
+import com.mvc.dyvault.common.swaggermock.IgnoreUpdate;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -14,6 +15,7 @@ import java.math.BigInteger;
  */
 @Table(name = "block_transaction")
 @Data
+@IgnoreUpdate(value = "id")
 public class BlockTransaction implements Serializable {
     /**
      * 区块链交易记录
