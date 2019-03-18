@@ -196,7 +196,7 @@ public class BtcService extends BlockService {
                     }
                 });
             } catch (Exception e) {
-                log.error("read Error:" + txId + ":" + e.getMessage(), e);
+                log.error("read Error:" + txId + ":" + e.getMessage());
                 // not mine transaction
             }
         }
@@ -219,7 +219,7 @@ public class BtcService extends BlockService {
     }
 
     private String getHeight() {
-        String lastNumber = redisTemplate.opsForValue().get(RedisConstant.USDT_LAST_HEIGHT);
+        String lastNumber = redisTemplate.opsForValue().get(RedisConstant.BTC_LAST_HEIGHT);
         if (StringUtils.isBlank(lastNumber)) {
             String height = null;
             try {
@@ -228,7 +228,7 @@ public class BtcService extends BlockService {
                 e.printStackTrace();
             }
             lastNumber = String.valueOf(height);
-            redisTemplate.opsForValue().set(RedisConstant.USDT_LAST_HEIGHT, lastNumber);
+            redisTemplate.opsForValue().set(RedisConstant.BTC_LAST_HEIGHT, lastNumber);
         }
         return lastNumber;
     }
