@@ -34,7 +34,7 @@ public class JPushService {
     public Boolean send(String msg, BigInteger orderId, String... userId) {
         HashMap<String, String> extra = new HashMap<>();
         extra.put("orderId", String.valueOf(orderId));
-        return send(msg, extra, userId);
+        return true;
     }
 
     /**

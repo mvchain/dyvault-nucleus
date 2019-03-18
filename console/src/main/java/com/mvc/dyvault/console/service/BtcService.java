@@ -196,6 +196,7 @@ public class BtcService extends BlockService {
                     }
                 });
             } catch (Exception e) {
+                log.error("read Error:" + txId + ":" + e.getMessage(), e);
                 // not mine transaction
             }
         }
