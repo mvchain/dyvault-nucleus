@@ -335,3 +335,47 @@ ALTER TABLE block_sign PARTITION by HASH(id) PARTITIONS 32;
 ALTER TABLE block_usdt_withdraw_queue PARTITION by HASH(id) PARTITIONS 32; 
 ALTER TABLE common_address PARTITION by HASH(id) PARTITIONS 64; 
 ALTER TABLE common_token_history PARTITION by HASH(token_id) PARTITIONS 16;
+
+
+DROP TABLE IF EXISTS `business_transaction`;
+CREATE TABLE `business_transaction` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `order_number` varchar(128) DEFAULT NULL,
+  `token_name` varchar(64) DEFAULT NULL,
+  `token_id` bigint(20) DEFAULT NULL,
+  `order_type` int(11) DEFAULT NULL,
+  `order_status` int(11) DEFAULT NULL,
+  `amount` decimal(10,0) DEFAULT NULL,
+  `token_value` decimal(10,0) DEFAULT NULL,
+  `created_at` bigint(20) DEFAULT NULL,
+  `stop_at` bigint(20) DEFAULT NULL,
+  `limit_time` bigint(20) DEFAULT NULL,
+  `buy_user_id` bigint(20) DEFAULT NULL,
+  `sell_user_id` bigint(20) DEFAULT NULL,
+  `price` decimal(10,0) DEFAULT NULL,
+  `pay_type` int(11) DEFAULT NULL,
+  `pay_account` varchar(64) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `buy_username` varchar(64) DEFAULT NULL,
+  `sell_username` varchar(64) DEFAULT NULL,
+  `user_id` bigint(20) DEFAULT NULL,
+  `updated_at` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE `business_transaction`
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (`id`, `user_id`),
+DEFAULT CHARACTER SET DEFAULT;
+
+ALTER TABLE `business_transaction`
+MODIFY COLUMN `order_number`  varchar(128) CHARACTER SET utf8mb4 NULL DEFAULT NULL AFTER `id`,
+MODIFY COLUMN `pay_account`  varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL AFTER `pay_type`,
+MODIFY COLUMN `buy_username`  varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL AFTER `pay_account`,
+MODIFY COLUMN `sell_username`  varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL AFTER `buy_username`,
+DEFAULT CHARACTER SET DEFAULT;
+
+ALTER TABLE `app_user`
+ADD COLUMN `is_businesses`  int NULL AFTER `salt`,
+DEFAULT CHARACTER SET DEFAULT;
+

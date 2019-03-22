@@ -77,7 +77,7 @@ public class AppUser implements Serializable {
     private String email;
     private Integer inviteNum;
     private String pvKey;
-
+    private Integer isBusinesses;
 
     /**
      * app_user

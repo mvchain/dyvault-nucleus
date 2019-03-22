@@ -5,6 +5,7 @@ import com.mvc.dyvault.app.bean.dto.PageDTO;
 import com.mvc.dyvault.common.bean.*;
 import com.mvc.dyvault.common.bean.dto.AppUserDTO;
 import com.mvc.dyvault.common.bean.dto.AssertVisibleDTO;
+import com.mvc.dyvault.common.bean.dto.BusinessSearchDTO;
 import com.mvc.dyvault.common.bean.dto.TransactionDTO;
 import com.mvc.dyvault.common.bean.vo.*;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -85,5 +86,11 @@ public interface ConsoleRemoteService {
 
     @GetMapping("channel")
     Result<List<AppChannel>> getChannel(@RequestParam(required = false, value = "id") BigInteger id, @RequestBody PageDTO pageDTO);
+
+    @GetMapping("business")
+    Result<List<BusinessSimpleVO>> getBusinessList(@RequestBody BusinessSearchDTO pageDTO,  @RequestParam("userId") BigInteger userId);
+
+    @GetMapping("business/{id}")
+    Result<BusinessDetailVO> getBusiness(@PathVariable("id") BigInteger id, @RequestParam("userId") BigInteger userId);
 
 }

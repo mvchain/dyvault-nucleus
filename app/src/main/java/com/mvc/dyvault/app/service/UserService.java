@@ -70,6 +70,7 @@ public class UserService {
         vo.setUserId(user.getId());
         vo.setEmail(user.getEmail());
         vo.setSalt(user.getSalt());
+        vo.setIsBusinesses(user.getIsBusinesses());
         return vo;
     }
 
@@ -136,6 +137,7 @@ public class UserService {
         vo.setToken(token);
         vo.setUserId(user.getData().getId());
         vo.setEmail(user.getData().getEmail());
+        vo.setIsBusinesses(user.getData().getIsBusinesses());
         vo.setSalt(appUserDTO.getSalt());
         return vo;
     }

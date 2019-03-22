@@ -28,8 +28,8 @@ import java.util.Map;
 @Log4j
 public class JPushService {
 
-    @Autowired
-    JPushClient jPushClient;
+//    @Autowired
+    JPushClient jPushClient = null;
 
     public Boolean send(String msg, BigInteger orderId, String... userId) {
         HashMap<String, String> extra = new HashMap<>();

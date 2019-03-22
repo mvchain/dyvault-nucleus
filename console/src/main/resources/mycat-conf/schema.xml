@@ -36,6 +36,7 @@
         <table name="common_token_history" dataNode="dn4,dn5,dn6" primaryKey="id" autoIncrement="true" rule="sharding-by-murmur-tokenid"/>
         <table name="token_volume" dataNode="dn4,dn5,dn6" primaryKey="id" autoIncrement="true" rule="sharding-by-murmur"/>
         <table name="app_user_invite" dataNode="dn4,dn5,dn6" primaryKey="user_id" autoIncrement="true" rule="sharding-by-murmur-userid"/>
+        <table name="business_transaction" dataNode="dn4,dn5,dn6" primaryKey="id" autoIncrement="true" rule="sharding-by-murmur-userid"/>
     </schema>
 
 
