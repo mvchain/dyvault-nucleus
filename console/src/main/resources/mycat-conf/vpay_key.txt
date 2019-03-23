@@ -42,6 +42,8 @@ INSERT INTO MYCAT_SEQUENCE(name,current_value,increment) VALUES ('app_financial'
 INSERT INTO MYCAT_SEQUENCE(name,current_value,increment) VALUES ('app_info', 100000, 1);
 INSERT INTO MYCAT_SEQUENCE(name,current_value,increment) VALUES ('app_channel', 100000, 1);
 INSERT INTO MYCAT_SEQUENCE(name,current_value,increment) VALUES ('business_transaction', 100000, 1);
+INSERT INTO MYCAT_SEQUENCE(name,current_value,increment) VALUES ('business_shop_payment', 100000, 1);
+INSERT INTO MYCAT_SEQUENCE(name,current_value,increment) VALUES ('business_shop', 100000, 1);
 
 #创建相关 function
 #获取当前 sequence 的值 (返回当前值,增量)

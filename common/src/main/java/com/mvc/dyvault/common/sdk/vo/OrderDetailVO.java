@@ -1,6 +1,5 @@
-package com.mvc.dyvault.common.bean.vo;
+package com.mvc.dyvault.common.sdk.vo;
 
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -9,11 +8,10 @@ import java.math.BigInteger;
 
 /**
  * @author qiyichen
- * @create 2019/3/22 11:01
+ * @create 2019/3/23 15:29
  */
 @Data
-@ApiModel("Business Detail VO")
-public class BusinessDetailVO {
+public class OrderDetailVO {
 
     @ApiModelProperty("business order id")
     private BigInteger id;

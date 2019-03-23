@@ -14,6 +14,7 @@
         <module>dashbord</module>
         <module>console</module>
         <module>eureka</module>
+        <module>sdk</module>
     </modules>
 
     <parent>

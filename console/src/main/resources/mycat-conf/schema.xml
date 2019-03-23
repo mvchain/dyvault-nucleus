@@ -23,6 +23,8 @@
         <table name="common_token_price" dataNode="dn4" primaryKey="token_id" autoIncrement="true"/>
         <table name="app_channel" dataNode="dn4" primaryKey="id" autoIncrement="true"/>
         <table name="app_info" dataNode="dn4" primaryKey="app_type"/>
+        <table name="business_shop_payment" dataNode="dn4" primaryKey="id" autoIncrement="true"/>
+        <table name="business_shop" dataNode="dn4" primaryKey="id" autoIncrement="true"/>
         <!--以下数据库较大,进行分片-->
         <table name="app_message" dataNode="dn4,dn5,dn6" primaryKey="id" autoIncrement="true" rule="sharding-by-murmur-userid"/>
         <table name="app_order" dataNode="dn4,dn5,dn6" primaryKey="id" autoIncrement="true" rule="sharding-by-murmur-userid"/>

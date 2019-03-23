@@ -336,11 +336,34 @@ ALTER TABLE block_usdt_withdraw_queue PARTITION by HASH(id) PARTITIONS 32;
 ALTER TABLE common_address PARTITION by HASH(id) PARTITIONS 64; 
 ALTER TABLE common_token_history PARTITION by HASH(token_id) PARTITIONS 16;
 
+DROP TABLE IF EXISTS `business_shop_payment`;
+CREATE TABLE `business_shop_payment` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `shop_id` bigint(20) DEFAULT NULL,
+  `payment_type` int(11) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `payment_account` varchar(128) DEFAULT NULL,
+  `account_name` varchar(128) DEFAULT NULL,
+  `bank` varchar(128) DEFAULT NULL,
+  `branch` varchar(128) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `business_shop`;
+CREATE TABLE `business_shop` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) DEFAULT NULL,
+  `updated_at` bigint(20) DEFAULT NULL,
+  `created_at` bigint(20) DEFAULT NULL,
+  `shop_name` varchar(128) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS `business_transaction`;
 CREATE TABLE `business_transaction` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `order_number` varchar(128) DEFAULT NULL,
+  `self_order_number` varchar(128) DEFAULT NULL,
   `token_name` varchar(64) DEFAULT NULL,
   `token_id` bigint(20) DEFAULT NULL,
   `order_type` int(11) DEFAULT NULL,
@@ -349,11 +372,13 @@ CREATE TABLE `business_transaction` (
   `token_value` decimal(10,0) DEFAULT NULL,
   `created_at` bigint(20) DEFAULT NULL,
   `stop_at` bigint(20) DEFAULT NULL,
+  `pay_at` bigint(20) DEFAULT NULL,
   `limit_time` bigint(20) DEFAULT NULL,
   `buy_user_id` bigint(20) DEFAULT NULL,
   `sell_user_id` bigint(20) DEFAULT NULL,
   `price` decimal(10,0) DEFAULT NULL,
   `pay_type` int(11) DEFAULT NULL,
+  `auto_send` int(11) DEFAULT NULL,
   `pay_account` varchar(64) DEFAULT NULL,
   `status` int(11) DEFAULT NULL,
   `buy_username` varchar(64) DEFAULT NULL,

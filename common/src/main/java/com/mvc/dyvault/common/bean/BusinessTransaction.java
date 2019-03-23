@@ -37,5 +37,8 @@ public class BusinessTransaction {
     @Column(name = "user_id", updatable = false)
     private BigInteger userId;
     private Long updatedAt;
+    private Long payAt;
+    private Integer autoSend;
+    private String selfOrderNumber;
 
 }

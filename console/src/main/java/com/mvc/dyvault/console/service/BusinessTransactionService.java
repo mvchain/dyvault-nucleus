@@ -1,10 +1,13 @@
 package com.mvc.dyvault.console.service;
 
 import com.github.pagehelper.PageHelper;
+import com.mvc.dyvault.common.bean.BusinessShop;
 import com.mvc.dyvault.common.bean.BusinessTransaction;
 import com.mvc.dyvault.common.bean.dto.BusinessSearchDTO;
 import com.mvc.dyvault.common.bean.vo.BusinessDetailVO;
 import com.mvc.dyvault.common.bean.vo.BusinessSimpleVO;
+import com.mvc.dyvault.common.sdk.dto.ConfirmOrderDTO;
+import com.mvc.dyvault.common.sdk.vo.OrderDetailVO;
 import com.mvc.dyvault.common.util.ConditionUtil;
 import com.mvc.dyvault.console.common.AbstractService;
 import com.mvc.dyvault.console.common.BaseService;
@@ -27,6 +30,8 @@ public class BusinessTransactionService extends AbstractService<BusinessTransact
     BusinessTransactionMapper businessTransactionMapper;
     @Autowired
     AppUserService appUserService;
+    @Autowired
+    ShopService shopService;
 
     public List<BusinessSimpleVO> getBusinessList(BusinessSearchDTO pageDTO, BigInteger userId) {
         PageHelper.startPage(1, pageDTO.getPageSize(), "id desc");
@@ -56,5 +61,81 @@ public class BusinessTransactionService extends AbstractService<BusinessTransact
         }
         BeanUtils.copyProperties(tx, result);
         return result;
+    }
+
+    public OrderDetailVO getDetail(BigInteger userId, BigInteger id) {
+        BusinessTransaction tx = findById(id);
+        if (!(tx.getSellUserId().equals(userId) || tx.getBuyUserId().equals(userId))) {
+            return null;
+        }
+        OrderDetailVO result = new OrderDetailVO();
+        BeanUtils.copyProperties(tx, result);
+        return result;
+    }
+
+    public OrderDetailVO checkOrderExist(BigInteger userId) {
+        Condition condition = new Condition(BusinessTransaction.class);
+        Example.Criteria criteria = condition.createCriteria();
+        ConditionUtil.andCondition(criteria, "status = ", 1);
+        ConditionUtil.andCondition(criteria, String.format("(buy_user_id = %s or sell_user_id = %s )", userId, userId));
+        List<BusinessTransaction> tx = findByCondition(condition);
+        if (tx.size() > 0) {
+            OrderDetailVO result = new OrderDetailVO();
+            BeanUtils.copyProperties(tx.get(0), result);
+            return result;
+        }
+        return null;
+    }
+
+    public BigInteger confirmOrder(BigInteger userId, ConfirmOrderDTO confirmOrderDTO) {
+        Long time = System.currentTimeMillis();
+        checkSign(confirmOrderDTO);
+        BusinessShop shop = shopService.findById(confirmOrderDTO.getShopId());
+        BusinessTransaction tx = new BusinessTransaction();
+        BeanUtils.copyProperties(confirmOrderDTO, tx);
+        tx.setOrderType(1);
+        tx.setOrderStatus(0);
+        tx.setStatus(1);
+        tx.setCreatedAt(time);
+        tx.setBuyUserId(userId);
+        tx.setSellUserId(shop.getUserId());
+        tx.setUserId(userId);
+        tx.setUpdatedAt(time);
+        tx.setPayAt(time);
+        tx.setAutoSend(1);
+        tx.setSelfOrderNumber(getOrderNumber());
+        save(tx);
+        sendPush();
+        return tx.getId();
+    }
+
+    private void checkSign(ConfirmOrderDTO confirmOrderDTO) {
+
+    }
+
+    public Boolean updateStatus(BigInteger userId, BigInteger id, Integer status, String payAccount) {
+        BusinessTransaction tx = findById(id);
+        if (!tx.getStatus().equals(userId)) {
+            return false;
+        }
+        if (status == 1) {
+            tx.setPayAccount(payAccount);
+            tx.setStatus(1);
+            tx.setOrderStatus(1);
+            tx.setPayAt(System.currentTimeMillis());
+            tx.setUpdatedAt(System.currentTimeMillis());
+            update(tx);
+            updateCache(tx.getId());
+        } else if (status == 4) {
+            tx.setStatus(status);
+            tx.setUpdatedAt(System.currentTimeMillis());
+            update(tx);
+            updateCache(tx.getId());
+        }
+        sendPush();
+        return true;
+    }
+
+    private void sendPush() {
     }
 }

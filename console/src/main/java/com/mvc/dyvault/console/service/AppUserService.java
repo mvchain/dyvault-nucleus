@@ -18,6 +18,7 @@ import com.mvc.dyvault.common.util.MnemonicUtil;
 import com.mvc.dyvault.console.common.AbstractService;
 import com.mvc.dyvault.console.common.BaseService;
 import com.mvc.dyvault.console.dao.AppUserMapper;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ThreadFactory;
 
 import static com.mvc.dyvault.common.constant.RedisConstant.APP_USER_USERNAME;
@@ -144,6 +146,28 @@ public class AppUserService extends AbstractService<AppUser> implements BaseServ
         appUser.setUpdatedAt(System.currentTimeMillis());
         update(appUser);
         updateCache(appUser.getId());
+    }
+
+    public AppUser regUser(String cellphone) {
+        AppUser user = new AppUser();
+        user.setCellphone(cellphone);
+        user.setIsBusinesses(0);
+        user.setSalt(UUID.randomUUID().toString().replaceAll("-", ""));
+        user.setStatus(5);
+        user.setUpdatedAt(System.currentTimeMillis());
+        user.setPassword(md5Encrypt(user.getSalt(), user.getSalt()));
+        user.setTransactionPassword(user.getPassword());
+        user.setCreatedAt(System.currentTimeMillis());
+        user.setInviteLevel(0);
+        user.setInviteNum(0);
+        user.setNickname(cellphone);
+        user.setPvKey(getCode());
+        save(user);
+        return user;
+    }
+
+    private String md5Encrypt(String pass, String salt) {
+        return DigestUtils.md5Hex((salt + DigestUtils.md5Hex(pass).toUpperCase())).toUpperCase();
     }
 
 }
