@@ -1,4 +1,4 @@
-package com.mvc.dyvault.sdk.controller.web;
+package com.mvc.dyvault.sdk.controller.app;
 
 import com.mvc.dyvault.common.bean.vo.Result;
 import com.mvc.dyvault.common.sdk.vo.PaymentVO;

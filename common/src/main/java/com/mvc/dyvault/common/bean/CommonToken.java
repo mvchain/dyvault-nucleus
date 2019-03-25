@@ -141,6 +141,7 @@ public class CommonToken implements Serializable {
      * 保留金额
      */
     private Float hold;
+    private Integer officialSell;
     /**
      * common_token
      */

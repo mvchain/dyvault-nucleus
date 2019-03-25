@@ -344,6 +344,7 @@ CREATE TABLE `business_shop_payment` (
   `status` int(11) DEFAULT NULL,
   `payment_account` varchar(128) DEFAULT NULL,
   `account_name` varchar(128) DEFAULT NULL,
+  `payment_image` varchar(255) DEFAULT NULL,
   `bank` varchar(128) DEFAULT NULL,
   `branch` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -404,3 +405,44 @@ ALTER TABLE `app_user`
 ADD COLUMN `is_businesses`  int NULL AFTER `salt`,
 DEFAULT CHARACTER SET DEFAULT;
 
+ALTER TABLE `app_user`
+ADD COLUMN `is_proxy`  int NULL AFTER `is_businesses`,
+DEFAULT CHARACTER SET DEFAULT;
+
+ALTER TABLE `common_token`
+ADD COLUMN `official_sell`  int NULL AFTER `hold`;
+
+ALTER TABLE `business_shop`
+ADD COLUMN `app_key`  varchar(64) NULL AFTER `shop_name`,
+ADD COLUMN `app_secret`  varchar(64) NULL AFTER `app_key`;
+
+ALTER TABLE `business_shop`
+ADD COLUMN `callback_url`  varchar(255) NULL AFTER `app_secret`;
+
+ALTER TABLE `business_transaction`
+ADD COLUMN `remit_user_id`  int NULL AFTER `self_order_number`,
+ADD COLUMN `remit_shop_id`  int NULL AFTER `remit_user_id`,
+DEFAULT CHARACTER SET DEFAULT;
+
+ALTER TABLE `business_shop_payment`
+ADD COLUMN `user_id`  bigint NULL AFTER `payment_image`,
+DEFAULT CHARACTER SET DEFAULT;
+    private Integer hasBank;
+    private Integer aliPaySwitch;
+    private Integer hasAliPay;
+    private Integer weChatSwitch;
+    private Integer hasWeChat;
+
+DROP TABLE IF EXISTS `business_supplier`;
+CREATE TABLE `business_supplier` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) DEFAULT NULL,
+  `price_differences` float(10,5) DEFAULT NULL,
+  `bank_switch` int(11) DEFAULT NULL,
+  `has_bank` int(11) DEFAULT NULL,
+  `ali_pay_switch` int(11) DEFAULT NULL,
+  `has_ali_pay` int(11) DEFAULT NULL,
+  `we_chat_switch` int(11) DEFAULT NULL,
+  `has_we_chat` int(11) DEFAULT NULL
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;

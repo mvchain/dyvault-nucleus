@@ -3,6 +3,7 @@ package com.mvc.dyvault.console.dashboard.controller;
 import com.github.pagehelper.PageInfo;
 import com.mvc.dyvault.common.bean.AppUser;
 import com.mvc.dyvault.common.bean.dto.PageDTO;
+import com.mvc.dyvault.common.bean.dto.UserTypeDTO;
 import com.mvc.dyvault.common.bean.vo.Result;
 import com.mvc.dyvault.common.bean.vo.TokenBalanceVO;
 import com.mvc.dyvault.common.dashboard.bean.dto.DUSerVO;
@@ -86,4 +87,9 @@ public class DAppUserController extends BaseController {
         return new Result<>(true);
     }
 
+    @PostMapping("userType")
+    public Result<Boolean> updateUserType(@RequestBody UserTypeDTO userTypeDTO) {
+        Boolean result = appUserService.updateUserType(userTypeDTO);
+        return new Result<>(result);
+    }
 }

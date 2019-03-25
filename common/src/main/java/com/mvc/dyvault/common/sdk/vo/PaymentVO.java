@@ -17,5 +17,6 @@ public class PaymentVO {
     private String paymentAccount;
     private String bank;
     private String branch;
+    private String paymentImage;
 
 }

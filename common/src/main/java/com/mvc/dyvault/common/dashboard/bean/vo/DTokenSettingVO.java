@@ -51,4 +51,7 @@ public class DTokenSettingVO implements Serializable {
     @ApiModelProperty("保留金额")
     private Float hold;
 
+    @ApiModelProperty("official sell")
+    private Integer officialSell;
+
 }

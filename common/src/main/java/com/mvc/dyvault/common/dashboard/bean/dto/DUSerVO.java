@@ -29,5 +29,6 @@ public class DUSerVO implements Serializable {
     private Integer inviteNum;
     @ApiModelProperty("邮箱地址")
     private String email;
-
+    @ApiModelProperty("user type(0.normal 1.token seller 2.business)")
+    private Integer userType;
 }

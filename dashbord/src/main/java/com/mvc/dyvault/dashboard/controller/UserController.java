@@ -1,9 +1,8 @@
 package com.mvc.dyvault.dashboard.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
-import com.mvc.dyvault.common.bean.AppUser;
 import com.mvc.dyvault.common.bean.dto.PageDTO;
+import com.mvc.dyvault.common.bean.dto.UserTypeDTO;
 import com.mvc.dyvault.common.bean.vo.Result;
 import com.mvc.dyvault.common.dashboard.bean.dto.DUSerVO;
 import com.mvc.dyvault.common.dashboard.bean.vo.DUSerDetailVO;
@@ -16,15 +15,11 @@ import com.mvc.dyvault.dashboard.util.ExcelUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.Cleanup;
-import org.apache.commons.io.IOUtils;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
 import java.util.LinkedHashMap;
@@ -96,5 +91,13 @@ public class UserController extends BaseController {
         userService.updateStatus(id, status);
         return new Result<>(true);
     }
+
+    @ApiOperation("change app user type(0.normal 1.token seller 2.business)")
+    @PutMapping("{id}/userType")
+    public Result<Boolean> updateUserType(@PathVariable BigInteger id, @RequestBody UserTypeDTO userTypeDTO) {
+        Boolean result = userService.updateUserType(userTypeDTO);
+        return new Result<>(result);
+    }
+
 
 }

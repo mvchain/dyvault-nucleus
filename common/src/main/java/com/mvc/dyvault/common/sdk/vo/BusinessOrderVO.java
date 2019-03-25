@@ -1,21 +1,17 @@
-package com.mvc.dyvault.common.bean;
+package com.mvc.dyvault.common.sdk.vo;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
 /**
  * @author qiyichen
- * @create 2019/3/22 15:11
+ * @create 2019/3/25 16:00
  */
 @Data
-public class BusinessTransaction {
+public class BusinessOrderVO {
 
-    @Id
     private BigInteger id;
     private String orderNumber;
     private String tokenName;
@@ -37,14 +33,22 @@ public class BusinessTransaction {
     private Integer remitShopId;
     private String buyUsername;
     private String sellUsername;
-    @Column(name = "user_id", updatable = false)
-    private BigInteger userId;
     private Long updatedAt;
     private Long payAt;
-    private Integer autoSend;
     private String selfOrderNumber;
 
-    @Transient
-    private String cellphone;
+    public String getStatusStr() {
+        switch (status) {
+            case 1:
+                return "充值中";
+            case 2:
+                return "已完成";
+            case 4:
+                return "已取消";
+            case 9:
+                return "失败";
+        }
+        return "失败";
+    }
 
 }

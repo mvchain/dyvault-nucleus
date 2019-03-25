@@ -6,6 +6,13 @@ import com.mvc.dyvault.common.bean.dto.*;
 import com.mvc.dyvault.common.bean.vo.*;
 import com.mvc.dyvault.common.dashboard.bean.dto.*;
 import com.mvc.dyvault.common.dashboard.bean.vo.*;
+import com.mvc.dyvault.common.sdk.dto.BusinessTxSearchDTO;
+import com.mvc.dyvault.common.sdk.dto.DevDTO;
+import com.mvc.dyvault.common.sdk.dto.PaymentDTO;
+import com.mvc.dyvault.common.sdk.vo.BusinessOrderVO;
+import com.mvc.dyvault.common.sdk.vo.BusinessTxCountVO;
+import com.mvc.dyvault.common.sdk.vo.DevVO;
+import com.mvc.dyvault.common.sdk.vo.ShopVO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -147,4 +154,39 @@ public interface ConsoleRemoteService {
 
     @DeleteMapping("dashboard/channel/{id}")
     Result<Boolean> delete(@PathVariable("id") BigInteger id);
+
+
+    @GetMapping("dashboard/shop")
+    Result<PageInfo<ShopVO>> getShop();
+
+    @GetMapping("dashboard/shop/{id}/develop")
+    Result<DevVO> getDevSetting(@PathVariable("id") BigInteger id);
+
+    @PostMapping("dashboard/shop/{id}/develop")
+    Result<Boolean> setDevSetting(@PathVariable("id") BigInteger id, @RequestBody DevDTO devDTO);
+
+    @GetMapping("dashboard/shop/{id}")
+    Result<PageInfo<BusinessOrderVO>> getBusinessList(@PathVariable("id") BigInteger id, @RequestBody BusinessTxSearchDTO businessTxSearchDTO);
+
+    @GetMapping("dashboard/shop/{id}/count")
+    Result<List<BusinessTxCountVO>> getBusinessCount(@PathVariable("id") BigInteger id, @RequestParam("startedAt") Long startedAt, @RequestParam("stopAt") Long stopAt);
+
+    @PostMapping("dashboard/appUser/userType")
+    Result<Boolean> updateUserType(@RequestBody UserTypeDTO userTypeDTO);
+
+    @GetMapping("dashboard/supplier/{id}/tx")
+    Result<PageInfo<BusinessTransaction>> getSupplierTxList(@PathVariable("id") BigInteger id, @RequestBody BusinessTransactionSearchDTO businessTransactionSearchDTO);
+
+    @GetMapping("dashboard/supplier/{id}/cancel")
+    Result<Boolean> cancelBusinessTx(@PathVariable("id") BigInteger id, @PathVariable("txId") BigInteger txId);
+
+    @GetMapping("dashboard/supplier/{id}/setting")
+    Result<SupplierVO> getSupplier(@PathVariable("id") BigInteger id);
+
+    @PostMapping("dashboard/supplier/{id}/setting")
+    Result<Boolean> updateSupplier(@PathVariable("id") BigInteger id, @RequestBody SupplierVO supplierVO);
+
+    @PostMapping("dashboard/supplier/{id}")
+    Result<Boolean> updatePayment(@PathVariable("id") BigInteger id, @RequestBody PaymentDTO paymentDTO);
+
 }

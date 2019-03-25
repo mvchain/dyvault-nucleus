@@ -16,12 +16,13 @@ public class BusinessShopPayment implements Serializable {
 
     @Id
     private BigInteger id;
-    private BigInteger shopId;
-    private String paymentType;
+    private BigInteger userId;
+    private Integer paymentType;
     private String accountName;
     private String paymentAccount;
     private String bank;
     private String branch;
     private Integer status;
+    private String paymentImage;
 
 }

@@ -7,6 +7,7 @@ import com.mvc.dyvault.common.bean.AppMessage;
 import com.mvc.dyvault.common.bean.AppUser;
 import com.mvc.dyvault.common.bean.dto.AppUserDTO;
 import com.mvc.dyvault.common.bean.dto.PageDTO;
+import com.mvc.dyvault.common.bean.dto.UserTypeDTO;
 import com.mvc.dyvault.common.bean.vo.AppUserRetVO;
 import com.mvc.dyvault.common.bean.vo.TokenBalanceVO;
 import com.mvc.dyvault.common.dashboard.bean.dto.DUSerVO;
@@ -51,6 +52,8 @@ public class AppUserService extends AbstractService<AppUser> implements BaseServ
     AppOrderService appOrderService;
     @Autowired
     CommonTokenService commonTokenService;
+    @Autowired
+    ShopService shopService;
 
     public PageInfo<DUSerVO> findUser(PageDTO pageDTO, String cellphone, Integer status) {
         PageHelper.startPage(pageDTO.getPageNum(), pageDTO.getPageSize(), "id desc");
@@ -69,6 +72,7 @@ public class AppUserService extends AbstractService<AppUser> implements BaseServ
             BigDecimal sum = data.stream().map(obj -> obj.getRatio().multiply(obj.getValue())).reduce(BigDecimal.ZERO, BigDecimal::add);
             vo.setBalance(sum);
             vo.setInviteNum(appUser.getInviteNum());
+            vo.setUserType(appUser.getIsBusinesses() == 1 ? 2 : appUser.getIsProxy() == 1 ? 1 : 0);
             vos.add(vo);
         }
         PageInfo result = new PageInfo(list);
@@ -170,4 +174,34 @@ public class AppUserService extends AbstractService<AppUser> implements BaseServ
         return DigestUtils.md5Hex((salt + DigestUtils.md5Hex(pass).toUpperCase())).toUpperCase();
     }
 
+    public Boolean updateUserType(UserTypeDTO userTypeDTO) {
+        AppUser user = findById(userTypeDTO.getUserId());
+        if (user == null) {
+            return false;
+        }
+        Long time = System.currentTimeMillis();
+        switch (userTypeDTO.getUserType()) {
+            case 0:
+                user.setIsBusinesses(0);
+                user.setIsProxy(0);
+                user.setUpdatedAt(time);
+                shopService.deleteShop(user.getId());
+                break;
+            case 1:
+                user.setIsBusinesses(0);
+                user.setIsProxy(1);
+                user.setUpdatedAt(time);
+                shopService.addShop(user.getId(), userTypeDTO.getName());
+                break;
+            case 2:
+                user.setIsBusinesses(1);
+                user.setIsProxy(0);
+                user.setUpdatedAt(time);
+                shopService.deleteShop(user.getId());
+                break;
+        }
+        update(user);
+        updateCache(user.getId());
+        return true;
+    }
 }

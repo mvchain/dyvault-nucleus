@@ -1,45 +1,26 @@
-package com.mvc.dyvault.sdk.service;
+package com.mvc.dyvault.dashboard.service;
 
 import com.github.pagehelper.PageInfo;
 import com.mvc.dyvault.common.bean.vo.Result;
 import com.mvc.dyvault.common.sdk.dto.BusinessTxSearchDTO;
-import com.mvc.dyvault.common.sdk.dto.ConfirmOrderDTO;
 import com.mvc.dyvault.common.sdk.dto.DevDTO;
-import com.mvc.dyvault.common.sdk.vo.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import com.mvc.dyvault.common.sdk.vo.BusinessOrderVO;
+import com.mvc.dyvault.common.sdk.vo.BusinessTxCountVO;
+import com.mvc.dyvault.common.sdk.vo.DevVO;
+import com.mvc.dyvault.common.sdk.vo.ShopVO;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.util.List;
 
+/**
+ * @author qiyichen
+ * @create 2018/11/19 19:58
+ */
 @Service
-public class BusinessService {
-
-    @Autowired
-    ConsoleRemoteService remoteService;
-    @Autowired
-    StringRedisTemplate redisTemplate;
-
-    public OrderDetailVO checkOrderExist(BigInteger userId) {
-        Result<OrderDetailVO> result = remoteService.checkOrderExist(userId);
-        return result.getData();
-    }
-
-    public BigInteger confirmOrder(BigInteger userId, ConfirmOrderDTO confirmOrderDTO) {
-        Result<BigInteger> result = remoteService.confirmOrder(userId, confirmOrderDTO);
-        return result.getData();
-    }
-
-    public Boolean updateStatus(BigInteger userId, BigInteger id, Integer status, String payAccount) {
-        Result<Boolean> result = remoteService.updateStatus(userId, id, status, payAccount);
-        return result.getData();
-    }
-
-    public OrderDetailVO getDetail(BigInteger userId, BigInteger id) {
-        Result<OrderDetailVO> result = remoteService.getDetail(userId, id);
-        return result.getData();
-    }
+@Transactional(rollbackFor = RuntimeException.class)
+public class BusinessService extends BaseService {
 
     public PageInfo<ShopVO> getShop() {
         Result<PageInfo<ShopVO>> result = remoteService.getShop();
@@ -65,4 +46,5 @@ public class BusinessService {
         Result<List<BusinessTxCountVO>> result = remoteService.getBusinessCount(id, startedAt, stopAt);
         return result.getData();
     }
+
 }

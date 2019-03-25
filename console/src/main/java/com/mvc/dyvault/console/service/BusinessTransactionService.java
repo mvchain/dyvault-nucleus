@@ -1,12 +1,15 @@
 package com.mvc.dyvault.console.service;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.mvc.dyvault.common.bean.BusinessShop;
 import com.mvc.dyvault.common.bean.BusinessTransaction;
 import com.mvc.dyvault.common.bean.dto.BusinessSearchDTO;
+import com.mvc.dyvault.common.bean.dto.BusinessTransactionSearchDTO;
 import com.mvc.dyvault.common.bean.vo.BusinessDetailVO;
 import com.mvc.dyvault.common.bean.vo.BusinessSimpleVO;
 import com.mvc.dyvault.common.sdk.dto.ConfirmOrderDTO;
+import com.mvc.dyvault.common.sdk.vo.BusinessTxCountVO;
 import com.mvc.dyvault.common.sdk.vo.OrderDetailVO;
 import com.mvc.dyvault.common.util.ConditionUtil;
 import com.mvc.dyvault.console.common.AbstractService;
@@ -138,4 +141,40 @@ public class BusinessTransactionService extends AbstractService<BusinessTransact
 
     private void sendPush() {
     }
+
+    public List<BusinessTxCountVO> getBusinessCount(BigInteger id, Long startedAt, Long stopAt) {
+        startedAt = null == startedAt ? 0L : startedAt;
+        stopAt = null == stopAt ? System.currentTimeMillis() : stopAt;
+        List<BusinessTxCountVO> result = businessTransactionMapper.getBusinessCount(id, startedAt, stopAt);
+        return result;
+    }
+
+    public Boolean cancel(BigInteger userId, BigInteger txId) {
+        BusinessTransaction tx = findById(txId);
+        if (null == tx) {
+            return false;
+        }
+        tx.setStatus(4);
+        tx.setOrderStatus(4);
+        tx.setUpdatedAt(System.currentTimeMillis());
+        tx.setStopAt(System.currentTimeMillis());
+        update(tx);
+        updateCache(tx.getId());
+        return true;
+    }
+
+    public PageInfo<BusinessTransaction> getSupplierTxList(BigInteger id, BusinessTransactionSearchDTO businessTransactionSearchDTO) {
+        PageHelper.startPage(businessTransactionSearchDTO.getPageNum(), businessTransactionSearchDTO.getPageSize(), "id desc");
+        Condition condition = new Condition(BusinessTransaction.class);
+        Example.Criteria criteria = condition.createCriteria();
+        ConditionUtil.andCondition(criteria, "order_number = ", businessTransactionSearchDTO.getOrderNumber());
+        ConditionUtil.andCondition(criteria, "pay_account = ", businessTransactionSearchDTO.getPayAccount());
+        List<BusinessTransaction> list = findByCondition(condition);
+        list.forEach(obj -> {
+            obj.setCellphone(appUserService.findById(obj.getBuyUserId()).getCellphone());
+        });
+        PageInfo result = new PageInfo(list);
+        return result;
+    }
+
 }

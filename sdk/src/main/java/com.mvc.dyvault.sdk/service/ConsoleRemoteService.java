@@ -1,10 +1,12 @@
 package com.mvc.dyvault.sdk.service;
 
+import com.github.pagehelper.PageInfo;
 import com.mvc.dyvault.common.bean.AppUser;
 import com.mvc.dyvault.common.bean.vo.Result;
+import com.mvc.dyvault.common.sdk.dto.BusinessTxSearchDTO;
 import com.mvc.dyvault.common.sdk.dto.ConfirmOrderDTO;
-import com.mvc.dyvault.common.sdk.vo.OrderDetailVO;
-import com.mvc.dyvault.common.sdk.vo.PaymentVO;
+import com.mvc.dyvault.common.sdk.dto.DevDTO;
+import com.mvc.dyvault.common.sdk.vo.*;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,4 +36,20 @@ public interface ConsoleRemoteService {
 
     @PostMapping("sdk/user")
     Result<AppUser> regUser(@RequestParam("cellphone") String cellphone);
+
+    @GetMapping("dashboard/shop")
+    Result<PageInfo<ShopVO>> getShop();
+
+    @GetMapping("dashboard/shop/{id}/develop")
+    Result<DevVO> getDevSetting(@PathVariable("id") BigInteger id);
+
+    @PostMapping("dashboard/shop/{id}/develop")
+    Result<Boolean> setDevSetting(@PathVariable("id") BigInteger id, @RequestBody DevDTO devDTO);
+
+    @GetMapping("dashboard/shop/{id}")
+    Result<PageInfo<BusinessOrderVO>> getBusinessList(@PathVariable("id") BigInteger id, @RequestBody BusinessTxSearchDTO businessTxSearchDTO);
+
+    @GetMapping("dashboard/shop/{id}/count")
+    Result<List<BusinessTxCountVO>> getBusinessCount(@PathVariable("id") BigInteger id, @RequestParam("startedAt") Long startedAt, @RequestParam("stopAt") Long stopAt);
+
 }

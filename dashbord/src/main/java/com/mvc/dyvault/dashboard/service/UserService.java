@@ -2,6 +2,7 @@ package com.mvc.dyvault.dashboard.service;
 
 import com.github.pagehelper.PageInfo;
 import com.mvc.dyvault.common.bean.dto.PageDTO;
+import com.mvc.dyvault.common.bean.dto.UserTypeDTO;
 import com.mvc.dyvault.common.bean.vo.Result;
 import com.mvc.dyvault.common.dashboard.bean.dto.DUSerVO;
 import com.mvc.dyvault.common.dashboard.bean.vo.DUSerDetailVO;
@@ -45,6 +46,11 @@ public class UserService extends BaseService {
     public Boolean updateStatus(BigInteger id, Integer status) {
         remoteService.updateUserStatus(id, status);
         return true;
+    }
+
+    public Boolean updateUserType(UserTypeDTO userTypeDTO) {
+        Result<Boolean> result = remoteService.updateUserType(userTypeDTO);
+        return result.getData();
     }
 
 }
