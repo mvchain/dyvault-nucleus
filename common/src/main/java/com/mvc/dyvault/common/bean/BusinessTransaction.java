@@ -33,8 +33,8 @@ public class BusinessTransaction {
     private BigDecimal price;
     private Integer payType;
     private String payAccount;
-    private Integer remitUserId;
-    private Integer remitShopId;
+    private BigInteger remitUserId;
+    private BigInteger remitShopId;
     private String buyUsername;
     private String sellUsername;
     @Column(name = "user_id", updatable = false)

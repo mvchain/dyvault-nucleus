@@ -3,6 +3,8 @@ package com.mvc.dyvault.common.sdk.dto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.math.BigInteger;
+
 /**
  * @author qiyichen
  * @create 2019/3/25 13:59
@@ -22,5 +24,7 @@ public class PaymentDTO {
     private String branch;
     @ApiModelProperty("QR Code image url")
     private String paymentImage;
+    @ApiModelProperty("shopId")
+    private BigInteger shopId;
 
 }

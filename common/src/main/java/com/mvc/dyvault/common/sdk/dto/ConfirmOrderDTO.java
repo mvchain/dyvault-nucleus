@@ -20,6 +20,8 @@ public class ConfirmOrderDTO {
     private BigDecimal tokenValue;
     private Long limitTime;
     private BigDecimal price;
+    private BigInteger remitUserId;
+    private BigInteger remitShopId;
     private Integer payType;
     private String payAccount;
     private String buyUsername;

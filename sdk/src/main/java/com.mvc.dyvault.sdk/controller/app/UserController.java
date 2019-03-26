@@ -3,6 +3,7 @@ package com.mvc.dyvault.sdk.controller.app;
 import com.mvc.dyvault.common.bean.vo.Result;
 import com.mvc.dyvault.common.bean.vo.TokenVO;
 import com.mvc.dyvault.common.permission.NotLogin;
+import com.mvc.dyvault.common.sdk.dto.SdkLoginDTO;
 import com.mvc.dyvault.sdk.controller.BaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,8 +23,8 @@ public class UserController extends BaseController {
     @ApiOperation("user login/register")
     @PostMapping("login")
     @NotLogin
-    public Result<TokenVO> login(@RequestParam String cellphone, @RequestParam String validCode) {
-        TokenVO result = userService.login(cellphone);
+    public Result<TokenVO> login(@RequestBody SdkLoginDTO sdkLoginDTO) {
+        TokenVO result = userService.login(sdkLoginDTO.getCellphone());
         return new Result<>(result);
     }
 

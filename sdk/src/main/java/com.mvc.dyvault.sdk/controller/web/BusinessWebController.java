@@ -39,38 +39,32 @@ public class BusinessWebController extends BaseController {
     private static LinkedHashMap<String, String> txMap = new LinkedHashMap<>();
     private static LinkedHashMap<String, String> countMap = new LinkedHashMap<>();
 
-    @ApiOperation("business shop list")
-    @GetMapping()
-    public Result<PageInfo<ShopVO>> getShop() {
-        return new Result<>(businessService.getShop());
-    }
-
     @ApiOperation("get develop setting")
-    @GetMapping("{id}/develop")
-    public Result<DevVO> getDevSetting(@PathVariable BigInteger id) {
-        DevVO result = businessService.getDevSetting(id);
+    @GetMapping("develop")
+    public Result<DevVO> getDevSetting() {
+        DevVO result = businessService.getDevSetting(getUserId());
         return new Result<>(result);
     }
 
     @ApiOperation("set develop setting")
-    @PostMapping("{id}/develop")
-    public Result<Boolean> getDevSetting(@PathVariable BigInteger id, @RequestBody DevDTO devDTO) {
-        Boolean result = businessService.setDevSetting(id, devDTO);
+    @PostMapping("develop")
+    public Result<Boolean> getDevSetting(@RequestBody DevDTO devDTO) {
+        Boolean result = businessService.setDevSetting(getUserId(), devDTO);
         return new Result<>(result);
     }
 
     @ApiOperation("search tx list")
-    @GetMapping("{id}")
-    public Result<PageInfo<BusinessOrderVO>> getList(@PathVariable BigInteger id, @ModelAttribute BusinessTxSearchDTO businessTxSearchDTO) {
-        PageInfo<BusinessOrderVO> result = businessService.getList(id, businessTxSearchDTO);
+    @GetMapping("")
+    public Result<PageInfo<BusinessOrderVO>> getList(@ModelAttribute BusinessTxSearchDTO businessTxSearchDTO) {
+        PageInfo<BusinessOrderVO> result = businessService.getList(getUserId(), businessTxSearchDTO);
         return new Result<>(result);
     }
 
     @ApiOperation("export search tx list")
-    @GetMapping("{id}/excel")
-    public void getListExcel(HttpServletResponse response, @RequestParam String sign, @PathVariable BigInteger id, @ModelAttribute BusinessTxSearchDTO businessTxSearchDTO) throws IOException, ExcelException {
+    @GetMapping("excel")
+    public void getListExcel(HttpServletResponse response, @RequestParam String sign, @ModelAttribute BusinessTxSearchDTO businessTxSearchDTO) throws IOException, ExcelException {
         getUserIdBySign(sign);
-        PageInfo<BusinessOrderVO> result = businessService.getList(id, businessTxSearchDTO);
+        PageInfo<BusinessOrderVO> result = businessService.getList(getUserId(), businessTxSearchDTO);
         response.setContentType("application/octet-stream;charset=ISO8859-1");
         response.addHeader("Content-Disposition", "attachment; filename=" + String.format("business_transaction_%s.xls", System.currentTimeMillis()));
         @Cleanup OutputStream os = response.getOutputStream();
@@ -78,17 +72,17 @@ public class BusinessWebController extends BaseController {
     }
 
     @ApiOperation("get business count")
-    @GetMapping("{id}/count")
-    public Result<List<BusinessTxCountVO>> getTxCount(@PathVariable BigInteger id, @RequestParam Long startedAt, @RequestParam Long stopAt) {
-        List<BusinessTxCountVO> result = businessService.getTxCount(id, startedAt, stopAt);
+    @GetMapping("count")
+    public Result<List<BusinessTxCountVO>> getTxCount(@RequestParam Long startedAt, @RequestParam Long stopAt) {
+        List<BusinessTxCountVO> result = businessService.getTxCount(getUserId(), startedAt, stopAt);
         return new Result<>(result);
     }
 
     @ApiOperation("get business count excel")
-    @GetMapping("{id}/count/excel")
-    public void getTxCountExcel(HttpServletResponse response, @RequestParam String sign, @PathVariable BigInteger id, @RequestParam Long startedAt, @RequestParam Long stopAt) throws IOException, ExcelException {
+    @GetMapping("count/excel")
+    public void getTxCountExcel(HttpServletResponse response, @RequestParam String sign, @RequestParam Long startedAt, @RequestParam Long stopAt) throws IOException, ExcelException {
         getUserIdBySign(sign);
-        List<BusinessTxCountVO> result = businessService.getTxCount(id, startedAt, startedAt);
+        List<BusinessTxCountVO> result = businessService.getTxCount(getUserId(), startedAt, startedAt);
         response.setContentType("application/octet-stream;charset=ISO8859-1");
         response.addHeader("Content-Disposition", "attachment; filename=" + String.format("business_transaction_count_%s.xls", System.currentTimeMillis()));
         @Cleanup OutputStream os = response.getOutputStream();

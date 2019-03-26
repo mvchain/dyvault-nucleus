@@ -20,6 +20,7 @@ public class BusinessShopPayment implements Serializable {
     private Integer paymentType;
     private String accountName;
     private String paymentAccount;
+    private BigInteger shopId;
     private String bank;
     private String branch;
     private Integer status;

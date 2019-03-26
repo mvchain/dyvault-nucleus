@@ -36,6 +36,7 @@ public class BusinessOrderVO {
     private Long updatedAt;
     private Long payAt;
     private String selfOrderNumber;
+    private String cellphone;
 
     public String getStatusStr() {
         switch (status) {

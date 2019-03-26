@@ -106,6 +106,8 @@ public class BusinessTransactionService extends AbstractService<BusinessTransact
         tx.setUpdatedAt(time);
         tx.setPayAt(time);
         tx.setAutoSend(1);
+        tx.setRemitShopId(confirmOrderDTO.getRemitShopId());
+        tx.setRemitUserId(confirmOrderDTO.getRemitUserId());
         tx.setSelfOrderNumber(getOrderNumber());
         save(tx);
         sendPush();
@@ -118,7 +120,7 @@ public class BusinessTransactionService extends AbstractService<BusinessTransact
 
     public Boolean updateStatus(BigInteger userId, BigInteger id, Integer status, String payAccount) {
         BusinessTransaction tx = findById(id);
-        if (!tx.getStatus().equals(userId)) {
+        if (!tx.getUserId().equals(userId)) {
             return false;
         }
         if (status == 1) {

@@ -443,6 +443,6 @@ CREATE TABLE `business_supplier` (
   `ali_pay_switch` int(11) DEFAULT NULL,
   `has_ali_pay` int(11) DEFAULT NULL,
   `we_chat_switch` int(11) DEFAULT NULL,
-  `has_we_chat` int(11) DEFAULT NULL
+  `has_we_chat` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

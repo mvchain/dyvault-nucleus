@@ -23,14 +23,21 @@ public class UserService {
 
     public TokenVO login(String cellphone) {
         TokenVO vo = new TokenVO();
-
         Result<AppUser> userResult = remoteService.getUserByCellphone(cellphone);
         if (null == userResult.getData()) {
             userResult = remoteService.regUser(cellphone);
-            return vo;
-        } else {
-            return vo;
         }
+        AppUser user = userResult.getData();
+        String token = JwtHelper.createToken(cellphone, user.getId());
+        String refreshToken = JwtHelper.createRefresh(cellphone, user.getId());
+        //密码正确后清空错误次数
+        vo.setRefreshToken(refreshToken);
+        vo.setToken(token);
+        vo.setUserId(user.getId());
+        vo.setEmail(user.getCellphone());
+        vo.setIsBusinesses(user.getIsBusinesses());
+        vo.setSalt(user.getSalt());
+        return vo;
     }
 
     public String refresh() throws LoginException {

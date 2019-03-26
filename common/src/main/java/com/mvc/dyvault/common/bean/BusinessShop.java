@@ -19,7 +19,7 @@ public class BusinessShop implements Serializable {
     private BigInteger userId;
     private String shopName;
     private Long createdAt;
-    private Long updateAt;
+    private Long updatedAt;
     private String appKey;
     private String appSecret;
     private String callbackUrl;

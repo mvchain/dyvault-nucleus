@@ -64,7 +64,7 @@ public class ShopService extends AbstractService<BusinessShop> implements BaseSe
         shop.setShopName(name);
         shop.setAppKey(UUID.randomUUID().toString().replace("-", ""));
         shop.setAppSecret(UUID.randomUUID().toString().replace("-", ""));
-        shop.setUpdateAt(System.currentTimeMillis());
+        shop.setUpdatedAt(System.currentTimeMillis());
         save(shop);
         updateCache(shop.getId());
     }
@@ -87,7 +87,7 @@ public class ShopService extends AbstractService<BusinessShop> implements BaseSe
             return false;
         }
         shop.setCallbackUrl(devDTO.getCallbackUrl());
-        save(shop);
+        update(shop);
         updateCache(shop.getId());
         return true;
     }
@@ -105,17 +105,18 @@ public class ShopService extends AbstractService<BusinessShop> implements BaseSe
         }
         Condition condition = new Condition(BusinessTransaction.class);
         Example.Criteria criteria = condition.createCriteria();
-        ConditionUtil.andCondition(criteria, "remitUserId = ", businessTxSearchDTO.getUserId());
-        ConditionUtil.andCondition(criteria, "buyUserId = ", userId);
-        ConditionUtil.andCondition(criteria, "orderNumber = ", businessTxSearchDTO.getOrderNumber());
+        ConditionUtil.andCondition(criteria, "remit_user_id = ", businessTxSearchDTO.getUserId());
+        ConditionUtil.andCondition(criteria, "buy_user_id = ", userId);
+        ConditionUtil.andCondition(criteria, "order_number = ", businessTxSearchDTO.getOrderNumber());
         ConditionUtil.andCondition(criteria, "status = ", businessTxSearchDTO.getStatus());
-        ConditionUtil.andCondition(criteria, "createdAt >= ", businessTxSearchDTO.getCreatedStartAt());
-        ConditionUtil.andCondition(criteria, "createdAt <=", businessTxSearchDTO.getCreatedStopAt());
+        ConditionUtil.andCondition(criteria, "created_at >= ", businessTxSearchDTO.getCreatedStartAt());
+        ConditionUtil.andCondition(criteria, "created_at <=", businessTxSearchDTO.getCreatedStopAt());
         List<BusinessTransaction> list = transactionService.findByCondition(condition);
         PageInfo result = new PageInfo<>(list);
         List<BusinessOrderVO> voList = list.stream().map(obj -> {
             BusinessOrderVO vo = new BusinessOrderVO();
             BeanUtils.copyProperties(obj, vo);
+            vo.setCellphone(appUserService.findById(obj.getUserId()).getCellphone());
             return vo;
         }).collect(Collectors.toList());
 

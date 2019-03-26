@@ -17,7 +17,8 @@ public class BusinessSupplierService extends AbstractService<BusinessSupplier> i
 
     @Autowired
     BusinessSupplierMapper businessSupplierMapper;
-
+    @Autowired
+    BusinessShopPaymentService paymentService;
 
     private BusinessSupplier findOneById(BigInteger id) {
         //now only one
@@ -45,6 +46,7 @@ public class BusinessSupplierService extends AbstractService<BusinessSupplier> i
             supplier.setBankSwitch(supplierVO.getBankSwitch());
             supplier.setWeChatSwitch(supplierVO.getWeChatSwitch());
             supplier.setPriceDifferences(supplierVO.getPriceDifferences());
+            paymentService.updateStatus(supplier.getUserId(), supplierVO);
             update(supplier);
             updateCache(supplier.getId());
             return true;
