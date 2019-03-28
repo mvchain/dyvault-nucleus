@@ -19,7 +19,7 @@ public class BusinessTransaction {
     private BigInteger id;
     private String orderNumber;
     private String tokenName;
-    private String tokenId;
+    private BigInteger tokenId;
     private Integer orderType;
     private Integer orderStatus;
     private Integer status;

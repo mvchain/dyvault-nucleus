@@ -1,8 +1,11 @@
 package com.mvc.dyvault.sdk.controller.app;
 
 import com.mvc.dyvault.common.bean.vo.Result;
+import com.mvc.dyvault.common.permission.NotLogin;
 import com.mvc.dyvault.common.sdk.dto.ConfirmOrderDTO;
 import com.mvc.dyvault.common.sdk.vo.OrderDetailVO;
+import com.mvc.dyvault.sdk.bean.ToPayEntity;
+import com.mvc.dyvault.sdk.bean.ToPayResponse;
 import com.mvc.dyvault.sdk.controller.BaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -50,6 +53,14 @@ public class BusinessController extends BaseController {
     public Result<OrderDetailVO> getDetail(@PathVariable BigInteger id) {
         OrderDetailVO result = businessService.getDetail(getUserId(), id);
         return new Result<>(result);
+    }
+
+    @ApiOperation("build order")
+    @PostMapping("build")
+    @NotLogin
+    public ToPayResponse createOrder(@RequestBody ToPayEntity toPayEntity) {
+        ToPayResponse response = businessService.createOrder(toPayEntity);
+        return response;
     }
 
 }

@@ -7,6 +7,8 @@ import com.mvc.dyvault.common.sdk.dto.BusinessTxSearchDTO;
 import com.mvc.dyvault.common.sdk.dto.ConfirmOrderDTO;
 import com.mvc.dyvault.common.sdk.dto.DevDTO;
 import com.mvc.dyvault.common.sdk.vo.*;
+import com.mvc.dyvault.sdk.bean.ToPayEntity;
+import com.mvc.dyvault.sdk.bean.ToPayResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,5 +53,8 @@ public interface ConsoleRemoteService {
 
     @GetMapping("dashboard/shop/{id}/count")
     Result<List<BusinessTxCountVO>> getBusinessCount(@PathVariable("id") BigInteger id, @RequestParam("startedAt") Long startedAt, @RequestParam("stopAt") Long stopAt);
+
+    @PostMapping("sdk/business/order")
+    ToPayResponse createOrder(@RequestBody ToPayEntity toPayEntity);
 
 }

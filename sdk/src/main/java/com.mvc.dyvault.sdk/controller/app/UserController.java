@@ -4,9 +4,11 @@ import com.mvc.dyvault.common.bean.vo.Result;
 import com.mvc.dyvault.common.bean.vo.TokenVO;
 import com.mvc.dyvault.common.permission.NotLogin;
 import com.mvc.dyvault.common.sdk.dto.SdkLoginDTO;
+import com.mvc.dyvault.common.util.MessageConstants;
 import com.mvc.dyvault.sdk.controller.BaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import javax.security.auth.login.LoginException;
@@ -24,6 +26,8 @@ public class UserController extends BaseController {
     @PostMapping("login")
     @NotLogin
     public Result<TokenVO> login(@RequestBody SdkLoginDTO sdkLoginDTO) {
+        Boolean checkResult = smsSender.checkSmsValidCode(sdkLoginDTO.getCellphone(), sdkLoginDTO.getValidCode());
+        Assert.isTrue(checkResult, MessageConstants.getMsg("SMS_ERROR"));
         TokenVO result = userService.login(sdkLoginDTO.getCellphone());
         return new Result<>(result);
     }
@@ -40,8 +44,8 @@ public class UserController extends BaseController {
     @GetMapping("sms")
     @NotLogin
     public Result<Boolean> sendSms(@RequestParam String cellphone) {
-        Boolean result = smsService.sendSms(cellphone);
-        return new Result<>(result);
+        smsSender.send(cellphone);
+        return new Result<>(true);
     }
 
 }

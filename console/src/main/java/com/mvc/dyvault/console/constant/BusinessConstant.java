@@ -74,4 +74,5 @@ public interface BusinessConstant {
     String REDIS_QUEUE = "REDIS_QUEUE";
     String WITHDRAW_USDT_QUEUE = "WITHDRAW_USDT_QUEUE";
     String INNER_BLOCK = "INNER_BLOCK";
+    String INNER_AUTO_DEBIT = "INNER_AUTO_DEBIT";
 }

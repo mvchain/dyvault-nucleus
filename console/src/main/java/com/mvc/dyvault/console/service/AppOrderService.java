@@ -44,6 +44,8 @@ public class AppOrderService extends AbstractService<AppOrder> implements BaseSe
     AppMessageService appMessageService;
     @Autowired
     CommonTokenService tokenService;
+    @Autowired
+    AppUserService userService;
 
     public TransactionDetailVO getDetail(BigInteger userId, BigInteger id) {
         var order = findById(id);
@@ -82,7 +84,7 @@ public class AppOrderService extends AbstractService<AppOrder> implements BaseSe
         Example.Criteria criteria = condition.createCriteria();
         ConditionUtil.andCondition(criteria, "user_id = ", userId);
         ConditionUtil.andCondition(criteria, "token_id = ", transactionSearchDTO.getTokenId());
-        if(null != transactionSearchDTO.getTransactionType() && 0!= transactionSearchDTO.getTransactionType()){
+        if (null != transactionSearchDTO.getTransactionType() && 0 != transactionSearchDTO.getTransactionType()) {
             ConditionUtil.andCondition(criteria, "order_type = ", transactionSearchDTO.getTransactionType());
         }
         PageHelper.startPage(1, transactionSearchDTO.getPageSize());
@@ -259,7 +261,7 @@ public class AppOrderService extends AbstractService<AppOrder> implements BaseSe
         appMessageService.transferMsg(appOrder.getId(), appOrder.getUserId(), message, sendMsg);
     }
 
-    public void saveOrder(Integer classify,  String from, String to, BigInteger tokenId, BigDecimal value, BigInteger userId, String tokenName, Integer orderType) {
+    public void saveOrder(Integer classify, String from, String to, BigInteger tokenId, BigDecimal value, BigInteger userId, String tokenName, Integer orderType) {
         CommonToken token = tokenService.findById(tokenId);
         Long time = System.currentTimeMillis();
         AppOrder appOrder = new AppOrder();
@@ -305,6 +307,34 @@ public class AppOrderService extends AbstractService<AppOrder> implements BaseSe
             vo.setValue(obj.getValue());
             return vo;
         }).collect(Collectors.toList());
+    }
+
+    public void saveOrder(BusinessTransaction tx) {
+        Long time = System.currentTimeMillis();
+        AppOrder appOrder = new AppOrder();
+        appOrder.setClassify(5);
+        appOrder.setCreatedAt(time);
+        appOrder.setUpdatedAt(time);
+        appOrder.setFromAddress(userService.findById(tx.getRemitUserId()).getNickname());
+        appOrder.setFee(BigDecimal.ZERO);
+        appOrder.setHash("");
+        appOrder.setOrderContentId(tx.getId());
+        appOrder.setOrderContentName(BusinessConstant.INNER_AUTO_DEBIT);
+        appOrder.setOrderNumber(tx.getOrderNumber());
+        appOrder.setValue(tx.getTokenValue());
+        appOrder.setToAddress(tx.getBuyUsername());
+        appOrder.setUserId(tx.getUserId());
+        appOrder.setTokenId(tx.getTokenId());
+        appOrder.setStatus(2);
+        appOrder.setOrderType(1);
+        appOrder.setOrderRemark(appOrder.getFromAddress());
+        save(appOrder);
+        AppOrder targetOrder = new AppOrder();
+        BeanUtils.copyProperties(appOrder, targetOrder);
+        targetOrder.setId(null);
+        targetOrder.setOrderRemark(appOrder.getToAddress());
+        targetOrder.setOrderType(2);
+        save(targetOrder);
     }
 
 }

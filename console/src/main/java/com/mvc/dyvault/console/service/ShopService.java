@@ -8,6 +8,7 @@ import com.mvc.dyvault.common.bean.BusinessShopPayment;
 import com.mvc.dyvault.common.bean.BusinessTransaction;
 import com.mvc.dyvault.common.sdk.dto.BusinessTxSearchDTO;
 import com.mvc.dyvault.common.sdk.dto.DevDTO;
+import com.mvc.dyvault.common.sdk.dto.KeyPairResult;
 import com.mvc.dyvault.common.sdk.vo.BusinessOrderVO;
 import com.mvc.dyvault.common.sdk.vo.BusinessTxCountVO;
 import com.mvc.dyvault.common.sdk.vo.DevVO;
@@ -16,6 +17,7 @@ import com.mvc.dyvault.common.util.ConditionUtil;
 import com.mvc.dyvault.console.common.AbstractService;
 import com.mvc.dyvault.console.common.BaseService;
 import com.mvc.dyvault.console.dao.BusinessShopMapper;
+import com.mvc.dyvault.console.util.RSAEncrypt;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,12 +60,14 @@ public class ShopService extends AbstractService<BusinessShop> implements BaseSe
 
 
     public void addShop(BigInteger id, String name) {
+        KeyPairResult pair = RSAEncrypt.genKeyPair();
         BusinessShop shop = new BusinessShop();
         shop.setUserId(id);
         shop.setCreatedAt(System.currentTimeMillis());
         shop.setShopName(name);
         shop.setAppKey(UUID.randomUUID().toString().replace("-", ""));
-        shop.setAppSecret(UUID.randomUUID().toString().replace("-", ""));
+        shop.setAppSecret(pair.getPublicKey());
+        shop.setAppPrivate(pair.getPrivateKey());
         shop.setUpdatedAt(System.currentTimeMillis());
         save(shop);
         updateCache(shop.getId());
@@ -117,11 +121,17 @@ public class ShopService extends AbstractService<BusinessShop> implements BaseSe
             BusinessOrderVO vo = new BusinessOrderVO();
             BeanUtils.copyProperties(obj, vo);
             vo.setCellphone(appUserService.findById(obj.getUserId()).getCellphone());
+            vo.setLimitTime(getLimitTime(obj));
             return vo;
         }).collect(Collectors.toList());
 
         result.setList(voList);
         return result;
+    }
+
+    private Long getLimitTime(BusinessTransaction tx) {
+        Long time = tx.getLimitTime() - System.currentTimeMillis() - tx.getCreatedAt();
+        return time >= 0 ? time : 0L;
     }
 
     public List<BusinessTxCountVO> getBusinessCount(BigInteger id, Long startedAt, Long stopAt) {

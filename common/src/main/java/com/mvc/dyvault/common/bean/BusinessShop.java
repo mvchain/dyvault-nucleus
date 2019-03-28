@@ -22,6 +22,7 @@ public class BusinessShop implements Serializable {
     private Long updatedAt;
     private String appKey;
     private String appSecret;
+    private String appPrivate;
     private String callbackUrl;
 
 }

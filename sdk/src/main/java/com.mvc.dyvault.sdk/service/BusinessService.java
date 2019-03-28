@@ -6,6 +6,8 @@ import com.mvc.dyvault.common.sdk.dto.BusinessTxSearchDTO;
 import com.mvc.dyvault.common.sdk.dto.ConfirmOrderDTO;
 import com.mvc.dyvault.common.sdk.dto.DevDTO;
 import com.mvc.dyvault.common.sdk.vo.*;
+import com.mvc.dyvault.sdk.bean.ToPayEntity;
+import com.mvc.dyvault.sdk.bean.ToPayResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -64,5 +66,10 @@ public class BusinessService {
     public List<BusinessTxCountVO> getTxCount(BigInteger id, Long startedAt, Long stopAt) {
         Result<List<BusinessTxCountVO>> result = remoteService.getBusinessCount(id, startedAt, stopAt);
         return result.getData();
+    }
+
+    public ToPayResponse createOrder(ToPayEntity toPayEntity) {
+        ToPayResponse response = remoteService.createOrder(toPayEntity);
+        return response;
     }
 }

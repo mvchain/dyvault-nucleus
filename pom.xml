@@ -15,6 +15,7 @@
         <module>console</module>
         <module>eureka</module>
         <module>sdk</module>
+        <module>simulation</module>
     </modules>
 
     <parent>

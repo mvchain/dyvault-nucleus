@@ -446,3 +446,9 @@ CREATE TABLE `business_supplier` (
   `has_we_chat` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE `business_shop`
+MODIFY COLUMN `app_secret`  varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL AFTER `app_key`,
+ADD COLUMN `app_private`  varchar(512) NULL AFTER `callback_url`,
+DEFAULT CHARACTER SET DEFAULT;
+

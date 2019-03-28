@@ -15,7 +15,7 @@ public class ConfirmOrderDTO {
     private BigInteger shopId;
     private String orderNumber;
     private String tokenName;
-    private String tokenId;
+    private BigInteger tokenId;
     private BigDecimal amount;
     private BigDecimal tokenValue;
     private Long limitTime;

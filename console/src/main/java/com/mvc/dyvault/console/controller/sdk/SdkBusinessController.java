@@ -3,6 +3,8 @@ package com.mvc.dyvault.console.controller.sdk;
 import com.mvc.dyvault.common.bean.vo.Result;
 import com.mvc.dyvault.common.sdk.dto.ConfirmOrderDTO;
 import com.mvc.dyvault.common.sdk.vo.OrderDetailVO;
+import com.mvc.dyvault.console.bean.ToPayEntity;
+import com.mvc.dyvault.console.bean.ToPayResponse;
 import com.mvc.dyvault.console.common.BaseController;
 import com.mvc.dyvault.console.service.BusinessTransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,12 @@ public class SdkBusinessController extends BaseController {
     public Result<OrderDetailVO> getDetail(@RequestParam("userId") BigInteger userId, @PathVariable("id") BigInteger id) {
         OrderDetailVO result = businessTransactionService.getDetail(userId, id);
         return new Result<>(result);
+    }
+
+    @PostMapping("order")
+    public ToPayResponse createOrder(@RequestBody ToPayEntity toPayEntity){
+        ToPayResponse response = businessTransactionService.createOrder(toPayEntity);
+        return response;
     }
 
 }

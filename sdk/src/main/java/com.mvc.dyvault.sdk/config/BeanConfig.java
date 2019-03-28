@@ -1,6 +1,7 @@
 package com.mvc.dyvault.sdk.config;
 
 import com.mvc.dyvault.common.util.JwtHelper;
+import com.twilio.Twilio;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,10 @@ public class BeanConfig {
     private String captchaId;
     @Value("${geetest.privateKey}")
     private String privateKey;
+    @Value("${sms.token}")
+    private String token;
+    @Value("${sms.sid}")
+    private String sid;
 
     @Bean
     JwtHelper jwtHelper2() {
@@ -30,6 +35,7 @@ public class BeanConfig {
         JwtHelper.expire = expire;
         JwtHelper.refresh = refresh;
         JwtHelper.base64Secret = base64Secret;
+        Twilio.init(sid, token);
         return new JwtHelper();
     }
 

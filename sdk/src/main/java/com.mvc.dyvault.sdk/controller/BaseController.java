@@ -5,6 +5,7 @@ import com.mvc.dyvault.sdk.service.BusinessService;
 import com.mvc.dyvault.sdk.service.ShopService;
 import com.mvc.dyvault.sdk.service.SmsService;
 import com.mvc.dyvault.sdk.service.UserService;
+import com.mvc.dyvault.sdk.util.SmsSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
@@ -25,7 +26,7 @@ public class BaseController {
     @Autowired
     protected ShopService shopService;
     @Autowired
-    protected SmsService smsService;
+    protected SmsSender smsSender;
 
 
     protected BigInteger getUserId() {

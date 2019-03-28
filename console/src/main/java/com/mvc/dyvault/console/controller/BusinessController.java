@@ -24,7 +24,7 @@ public class BusinessController extends BaseController {
     BusinessTransactionService businessService;
 
     @GetMapping("")
-    public Result<List<BusinessSimpleVO>> getBusinessList(@RequestParam("userId") BigInteger userId , @ModelAttribute BusinessSearchDTO pageDTO) {
+    public Result<List<BusinessSimpleVO>> getBusinessList(@RequestParam("userId") BigInteger userId, @ModelAttribute BusinessSearchDTO pageDTO) {
         List<BusinessSimpleVO> result = businessService.getBusinessList(pageDTO, userId);
         return new Result<>(result);
     }
@@ -35,4 +35,9 @@ public class BusinessController extends BaseController {
         return new Result<>(result);
     }
 
+    @PutMapping("{id}")
+    public Result<Boolean> confirmOrder(@RequestParam BigInteger userId, @PathVariable BigInteger id) {
+        Boolean result = businessService.confirmOrderComplete(userId, id);
+        return new Result<>(result);
+    }
 }

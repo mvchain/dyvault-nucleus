@@ -20,7 +20,7 @@ public class BusinessSupplierService extends AbstractService<BusinessSupplier> i
     @Autowired
     BusinessShopPaymentService paymentService;
 
-    private BusinessSupplier findOneById(BigInteger id) {
+    public BusinessSupplier findOneById(BigInteger id) {
         //now only one
         List<BusinessSupplier> list = findAll();
         if (null == list || list.size() == 0) {

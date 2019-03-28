@@ -27,4 +27,10 @@ public class BusinessService {
         Result<BusinessDetailVO> result = consoleRemoteService.getBusiness(id, userId);
         return result.getData();
     }
+
+    public Boolean confirmOrder(BigInteger userId, BigInteger id) {
+        Result<Boolean> result = consoleRemoteService.confirmOrder(userId, id);
+        return result.getData();
+    }
+
 }

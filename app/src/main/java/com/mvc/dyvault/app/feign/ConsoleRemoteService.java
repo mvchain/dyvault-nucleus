@@ -88,9 +88,11 @@ public interface ConsoleRemoteService {
     Result<List<AppChannel>> getChannel(@RequestParam(required = false, value = "id") BigInteger id, @RequestBody PageDTO pageDTO);
 
     @GetMapping("business")
-    Result<List<BusinessSimpleVO>> getBusinessList(@RequestBody BusinessSearchDTO pageDTO,  @RequestParam("userId") BigInteger userId);
+    Result<List<BusinessSimpleVO>> getBusinessList(@RequestBody BusinessSearchDTO pageDTO, @RequestParam("userId") BigInteger userId);
 
     @GetMapping("business/{id}")
     Result<BusinessDetailVO> getBusiness(@PathVariable("id") BigInteger id, @RequestParam("userId") BigInteger userId);
 
+    @PutMapping("business/{id}")
+    Result<Boolean> confirmOrder(@RequestParam("userId") BigInteger userId, @PathVariable("id") BigInteger id);
 }

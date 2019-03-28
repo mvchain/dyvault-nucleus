@@ -28,7 +28,7 @@ import java.util.Map;
 @Log4j
 public class JPushService {
 
-//    @Autowired
+    @Autowired
     JPushClient jPushClient = null;
 
     public Boolean send(String msg, BigInteger orderId, String... userId) {
@@ -60,7 +60,7 @@ public class JPushService {
             log.info("HTTP Status: " + e.getStatus());
             log.info("Error Code: " + e.getErrorCode());
             log.info("Error Message: " + e.getErrorMessage());
-        } catch (Exception e){
+        } catch (Exception e) {
             log.info("HTTP Status: " + e.getMessage());
         }
         //失败则添加到队列并重发
@@ -71,7 +71,7 @@ public class JPushService {
         return PushPayload.newBuilder()
                 .setPlatform(Platform.all())
                 .setAudience(Audience.alias(userId))
-                .setNotification(Notification.newBuilder().addPlatformNotification( IosNotification.newBuilder().setAlert(msg).addExtras(extra).build()).build())
+                .setNotification(Notification.newBuilder().addPlatformNotification(IosNotification.newBuilder().setAlert(msg).addExtras(extra).build()).build())
                 .setMessage(Message.newBuilder().setMsgContent(msg).addExtras(extra).build())
                 .build();
     }

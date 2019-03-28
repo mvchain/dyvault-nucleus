@@ -39,4 +39,11 @@ public class BusinessController extends BaseController {
         return new Result<>(businessService.getBusiness(id, getUserId()));
     }
 
+    @ApiOperation("confirm order(balances must be enough)")
+    @PutMapping("{id}")
+    public Result<Boolean> confirmOrder(@PathVariable BigInteger id) {
+        return new Result<>(businessService.confirmOrder(getUserId(), id));
+    }
+
+
 }
