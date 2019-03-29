@@ -52,5 +52,6 @@ public class OrderDetailVO {
     private Integer payType;
     @ApiModelProperty("pay account")
     private String payAccount;
-
+    @ApiModelProperty("shop id")
+    private BigInteger shopId;
 }
