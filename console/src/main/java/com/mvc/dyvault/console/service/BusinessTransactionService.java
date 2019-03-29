@@ -121,6 +121,7 @@ public class BusinessTransactionService extends AbstractService<BusinessTransact
         if (tx.size() > 0) {
             OrderDetailVO result = new OrderDetailVO();
             BeanUtils.copyProperties(tx.get(0), result);
+            result.setShopId(shopService.findOneBy("userId", tx.get(0).getSellUserId()).getId());
             return result;
         }
         return null;
@@ -151,6 +152,7 @@ public class BusinessTransactionService extends AbstractService<BusinessTransact
         tx.setRemitUserId(confirmOrderDTO.getRemitUserId());
         tx.setSelfOrderNumber(getOrderNumber());
         save(tx);
+        notifyTx(tx);
         return tx.getId();
     }
 
@@ -183,11 +185,14 @@ public class BusinessTransactionService extends AbstractService<BusinessTransact
 
 
     private void sendPush(BigInteger userId, BigInteger id, Integer status) {
-        HashMap<String, String> extra = new HashMap<>();
-        extra.put("type", "ORDER_STATUS");
-        extra.put("id", String.valueOf(id));
-        extra.put("status", String.valueOf(status));
-        pushService.send("order msg", extra, userId.toString());
+        if (status == 2 || status == 4) {
+            HashMap<String, String> extra = new HashMap<>();
+            extra.put("type", "ORDER_STATUS");
+            extra.put("id", String.valueOf(id));
+            extra.put("status", String.valueOf(status));
+            pushService.send("order msg", extra, userId.toString());
+        }
+
     }
 
     public List<BusinessTxCountVO> getBusinessCount(BigInteger id, Long startedAt, Long stopAt) {

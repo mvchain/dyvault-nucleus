@@ -47,6 +47,7 @@ public class ShopService extends AbstractService<BusinessShop> implements BaseSe
         return list.stream().filter(obj -> obj.getStatus() == 1).map(obj -> {
             PaymentVO vo = new PaymentVO();
             BeanUtils.copyProperties(obj, vo);
+            vo.setPaymentType(obj.getPaymentType());
             return vo;
         }).collect(Collectors.toList());
     }

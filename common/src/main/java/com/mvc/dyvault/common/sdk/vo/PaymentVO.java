@@ -12,7 +12,7 @@ import java.math.BigInteger;
 public class PaymentVO {
 
     private BigInteger shopId;
-    private String paymentType;
+    private Integer paymentType;
     private String accountName;
     private String paymentAccount;
     private String bank;

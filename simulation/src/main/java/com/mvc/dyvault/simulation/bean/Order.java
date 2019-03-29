@@ -6,11 +6,14 @@ import java.math.BigDecimal;
 
 /**
  * @author qiyichen
- * @create 2019/3/28 13:28
+ * @create 2019/3/29 15:03
  */
 @Data
-public class SimulationDTO {
+public class Order {
 
+    private String orderNumber;
     private BigDecimal cny;
-    private String uid;
+    private Long createdAt;
+    private Integer status;
+
 }
