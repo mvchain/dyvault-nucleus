@@ -130,7 +130,7 @@ public class ShopService extends AbstractService<BusinessShop> implements BaseSe
     }
 
     private Long getLimitTime(BusinessTransaction tx) {
-        Long time = tx.getLimitTime() - System.currentTimeMillis() - tx.getCreatedAt();
+        Long time = tx.getLimitTime() - (System.currentTimeMillis() - tx.getCreatedAt());
         return time >= 0 ? time : 0L;
     }
 

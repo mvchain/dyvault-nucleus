@@ -312,7 +312,7 @@ public class AppOrderService extends AbstractService<AppOrder> implements BaseSe
     public void saveOrder(BusinessTransaction tx) {
         Long time = System.currentTimeMillis();
         AppOrder appOrder = new AppOrder();
-        appOrder.setClassify(5);
+        appOrder.setClassify(6);
         appOrder.setCreatedAt(time);
         appOrder.setUpdatedAt(time);
         appOrder.setFromAddress(userService.findById(tx.getRemitUserId()).getNickname());

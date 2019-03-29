@@ -95,7 +95,7 @@ public class BusinessTransactionService extends AbstractService<BusinessTransact
     }
 
     private Long getLimitTime(BusinessTransaction tx) {
-        Long time = tx.getLimitTime() - System.currentTimeMillis() - tx.getCreatedAt();
+        Long time = tx.getLimitTime() - (System.currentTimeMillis() - tx.getCreatedAt());
         return time >= 0 ? time : 0L;
     }
 
@@ -106,7 +106,7 @@ public class BusinessTransactionService extends AbstractService<BusinessTransact
         }
         OrderDetailVO result = new OrderDetailVO();
         BeanUtils.copyProperties(tx, result);
-        tx.setLimitTime(getLimitTime(tx));
+        result.setLimitTime(getLimitTime(tx));
         return result;
     }
 
@@ -178,6 +178,7 @@ public class BusinessTransactionService extends AbstractService<BusinessTransact
         sendPush(tx.getRemitUserId(), tx.getId(), tx.getStatus());
         return true;
     }
+
 
     private void sendPush(BigInteger userId, BigInteger id, Integer status) {
         HashMap<String, String> extra = new HashMap<>();
