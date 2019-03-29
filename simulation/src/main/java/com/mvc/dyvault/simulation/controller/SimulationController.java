@@ -10,6 +10,7 @@ import com.mvc.dyvault.simulation.bean.ToPayEntity;
 import com.mvc.dyvault.simulation.bean.ToPayResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -46,7 +47,9 @@ public class SimulationController {
         List<Order> result = new ArrayList<>();
         set.values().forEach(str -> {
             Order order = JSON.parseObject((String) str, Order.class);
-            result.add(order);
+            if (order.getStatus() == 2) {
+                result.add(order);
+            }
         });
         return new Result<>(result);
     }
@@ -57,9 +60,11 @@ public class SimulationController {
     public Result<Boolean> updateOrder(@RequestBody CallbackDTO callbackDTO) {
         System.out.println(JSON.toJSONString(callbackDTO));
         String jsonStr = (String) redisTemplate.opsForHash().get("SIMULATION_ORDER" + callbackDTO.getOrderNumber().split("#")[0], callbackDTO.getOrderNumber());
-        Order order = JSON.parseObject(jsonStr, Order.class);
-        order.setStatus(callbackDTO.getStatus());
-        redisTemplate.opsForHash().put("SIMULATION_ORDER" + callbackDTO.getOrderNumber().split("#")[0], callbackDTO.getOrderNumber(), JSON.toJSONString(order));
+        if (StringUtils.isNotBlank(jsonStr)) {
+            Order order = JSON.parseObject(jsonStr, Order.class);
+            order.setStatus(callbackDTO.getStatus());
+            redisTemplate.opsForHash().put("SIMULATION_ORDER" + callbackDTO.getOrderNumber().split("#")[0], callbackDTO.getOrderNumber(), JSON.toJSONString(order));
+        }
         return new Result(true);
     }
 

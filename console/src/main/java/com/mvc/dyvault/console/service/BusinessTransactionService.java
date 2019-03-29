@@ -122,6 +122,7 @@ public class BusinessTransactionService extends AbstractService<BusinessTransact
             OrderDetailVO result = new OrderDetailVO();
             BeanUtils.copyProperties(tx.get(0), result);
             result.setShopId(shopService.findOneBy("userId", tx.get(0).getSellUserId()).getId());
+            result.setLimitTime(getLimitTime(tx.get(0)));
             return result;
         }
         return null;
