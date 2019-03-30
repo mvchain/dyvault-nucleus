@@ -33,8 +33,8 @@ public class BusinessService {
         return result.getData();
     }
 
-    public Boolean updateStatus(BigInteger userId, BigInteger id, Integer status, String payAccount) {
-        Result<Boolean> result = remoteService.updateStatus(userId, id, status, payAccount);
+    public Boolean updateStatus(BigInteger userId, BigInteger id, Integer status,Integer payType, String payAccount) {
+        Result<Boolean> result = remoteService.updateStatus(userId, id, status, payType, payAccount);
         return result.getData();
     }
 

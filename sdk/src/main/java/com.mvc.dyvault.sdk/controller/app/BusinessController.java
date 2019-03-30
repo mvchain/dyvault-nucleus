@@ -40,11 +40,11 @@ public class BusinessController extends BaseController {
 
     @ApiOperation("update status order(complete, pay, cancel)")
     @PostMapping("{id}/status")
-    public Result<Boolean> updateStatus(@PathVariable BigInteger id, @RequestParam @ApiParam("1.pay 4.cancel") Integer status, @RequestParam(value = "payAccount", required = false) String payAccount) {
+    public Result<Boolean> updateStatus(@PathVariable BigInteger id, @RequestParam @ApiParam("1.pay 4.cancel") Integer status, @RequestParam(value = "payType", required = false) Integer payType, @RequestParam(value = "payAccount", required = false) String payAccount) {
         if (!(status == 1 || status == 4)) {
             return new Result<>(false);
         }
-        Boolean result = businessService.updateStatus(getUserId(), id, status, payAccount);
+        Boolean result = businessService.updateStatus(getUserId(), id, status, payType, payAccount);
         return new Result<>(result);
     }
 

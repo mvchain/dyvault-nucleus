@@ -12,6 +12,7 @@ import com.mvc.dyvault.common.bean.vo.TokenVO;
 import com.mvc.dyvault.common.bean.vo.UserSimpleVO;
 import com.mvc.dyvault.common.util.*;
 import io.jsonwebtoken.Claims;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -34,6 +35,9 @@ public class UserService {
     @Autowired
     MailService mailService;
 
+    public static void main(String[] args) {
+        System.out.println( DigestUtils.md5Hex(("chinaswlcx@sina.com" + DigestUtils.md5Hex("123456").toUpperCase())).toUpperCase());;
+    }
     public UserSimpleVO getUserById(BigInteger userId) {
         UserSimpleVO vo = new UserSimpleVO();
         Result<AppUser> userResult = userRemoteService.getUserById(userId);

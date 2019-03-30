@@ -161,11 +161,12 @@ public class BusinessTransactionService extends AbstractService<BusinessTransact
 
     }
 
-    public Boolean updateStatus(BigInteger userId, BigInteger id, Integer status, String payAccount) {
+    public Boolean updateStatus(BigInteger userId, BigInteger id, Integer status, Integer payType, String payAccount) {
         BusinessTransaction tx = findById(id);
         if (!tx.getUserId().equals(userId)) {
             return false;
         }
+        tx.setPayType(payType);
         if (status == 1) {
             tx.setPayAccount(payAccount);
             tx.setStatus(1);

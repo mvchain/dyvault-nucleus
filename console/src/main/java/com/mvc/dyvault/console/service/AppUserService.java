@@ -72,7 +72,7 @@ public class AppUserService extends AbstractService<AppUser> implements BaseServ
             BigDecimal sum = data.stream().map(obj -> obj.getRatio().multiply(obj.getValue())).reduce(BigDecimal.ZERO, BigDecimal::add);
             vo.setBalance(sum);
             vo.setInviteNum(appUser.getInviteNum());
-            vo.setUserType(appUser.getIsBusinesses() == 1 ? 2 : appUser.getIsProxy() == 1 ? 1 : 0);
+            vo.setUserType(null != appUser.getIsBusinesses() && appUser.getIsBusinesses() == 1 ? 2 : null != appUser.getIsProxy() && appUser.getIsProxy() == 1 ? 1 : 0);
             vos.add(vo);
         }
         PageInfo result = new PageInfo(list);

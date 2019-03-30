@@ -36,8 +36,8 @@ public class SdkBusinessController extends BaseController {
     }
 
     @PostMapping("{id}/status")
-    public Result<Boolean> updateStatus(@RequestParam("userId") BigInteger userId, @PathVariable("id") BigInteger id, @RequestParam("status") Integer status, @RequestParam(required = false) String payAccount) {
-        Boolean result = businessTransactionService.updateStatus(userId, id, status, payAccount);
+    public Result<Boolean> updateStatus(@RequestParam("userId") BigInteger userId, @PathVariable("id") BigInteger id, @RequestParam("status") Integer status, @RequestParam(value = "payType", required = false) Integer payType, @RequestParam(required = false) String payAccount) {
+        Boolean result = businessTransactionService.updateStatus(userId, id, status, payType, payAccount);
         return new Result<>(result);
     }
 

@@ -456,3 +456,7 @@ ALTER TABLE `business_transaction`
 MODIFY COLUMN `price`  decimal(20,10) NULL DEFAULT NULL AFTER `sell_user_id`,
 DEFAULT CHARACTER SET DEFAULT;
 
+ALTER TABLE `business_transaction`
+MODIFY COLUMN `token_value`  decimal(40,20) NULL DEFAULT NULL AFTER `amount`,
+DEFAULT CHARACTER SET DEFAULT;
+

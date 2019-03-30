@@ -25,7 +25,7 @@ public interface ConsoleRemoteService {
     Result<BigInteger> confirmOrder(@RequestParam("userId") BigInteger userId, @RequestBody ConfirmOrderDTO confirmOrderDTO);
 
     @PostMapping("sdk/business/{id}/status")
-    Result<Boolean> updateStatus(@RequestParam("userId") BigInteger userId, @PathVariable("id") BigInteger id, @RequestParam("status") Integer status, @RequestParam(value = "payAccount", required = false) String payAccount);
+    Result<Boolean> updateStatus(@RequestParam("userId") BigInteger userId, @PathVariable("id") BigInteger id, @RequestParam("status") Integer status, @RequestParam(value = "payType", required = false) Integer payType, @RequestParam(value = "payAccount", required = false) String payAccount);
 
     @GetMapping("sdk/business/{id}")
     Result<OrderDetailVO> getDetail(@RequestParam("userId") BigInteger userId, @PathVariable("id") BigInteger id);
