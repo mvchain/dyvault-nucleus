@@ -62,7 +62,7 @@ public class SimulationController {
         String jsonStr = (String) redisTemplate.opsForHash().get("SIMULATION_ORDER" + callbackDTO.getOrderNumber().split("#")[0], callbackDTO.getOrderNumber());
         if (StringUtils.isNotBlank(jsonStr)) {
             Order order = JSON.parseObject(jsonStr, Order.class);
-            order.setStatus(callbackDTO.getStatus());
+            order.setStatus(callbackDTO.getOrderStatus());
             redisTemplate.opsForHash().put("SIMULATION_ORDER" + callbackDTO.getOrderNumber().split("#")[0], callbackDTO.getOrderNumber(), JSON.toJSONString(order));
         }
         return new Result(true);
