@@ -175,6 +175,7 @@ public class BusinessTransactionService extends AbstractService<BusinessTransact
             update(tx);
             updateCache(tx.getId());
         } else if (status == 4) {
+            tx.setOrderStatus(4);
             tx.setStatus(status);
             tx.setUpdatedAt(System.currentTimeMillis());
             update(tx);

@@ -16,7 +16,7 @@ public interface BusinessTransactionMapper extends MyMapper<BusinessTransaction>
     List<BusinessTxCountVO> getBusinessCount(@Param("id") BigInteger id, @Param("startedAt") Long startedAt, @Param("stopAt") Long stopAt);
 
 
-    @Select("SELECT * FROM business_transaction WHERE status = 1 AND (created_at + limit_time) < #{currentTimeMillis} LIMIT 1")
+    @Select("SELECT * FROM business_transaction WHERE order_status = 0 AND (created_at + limit_time) < #{currentTimeMillis} LIMIT 1")
     BusinessTransaction getOverTx(@Param("currentTimeMillis") Long currentTimeMillis);
 
 }
