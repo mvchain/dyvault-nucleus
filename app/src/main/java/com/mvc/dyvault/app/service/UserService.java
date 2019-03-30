@@ -71,6 +71,7 @@ public class UserService {
         vo.setEmail(user.getEmail());
         vo.setSalt(user.getSalt());
         vo.setIsBusinesses(user.getIsBusinesses());
+        vo.setIsProxy(user.getIsProxy());
         return vo;
     }
 
@@ -138,6 +139,7 @@ public class UserService {
         vo.setUserId(user.getData().getId());
         vo.setEmail(user.getData().getEmail());
         vo.setIsBusinesses(user.getData().getIsBusinesses());
+        vo.setIsProxy(user.getData().getIsProxy());
         vo.setSalt(appUserDTO.getSalt());
         return vo;
     }

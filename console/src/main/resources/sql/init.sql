@@ -452,3 +452,7 @@ MODIFY COLUMN `app_secret`  varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_g
 ADD COLUMN `app_private`  varchar(512) NULL AFTER `callback_url`,
 DEFAULT CHARACTER SET DEFAULT;
 
+ALTER TABLE `business_transaction`
+MODIFY COLUMN `price`  decimal(20,10) NULL DEFAULT NULL AFTER `sell_user_id`,
+DEFAULT CHARACTER SET DEFAULT;
+

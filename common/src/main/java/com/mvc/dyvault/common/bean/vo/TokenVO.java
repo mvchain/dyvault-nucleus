@@ -23,5 +23,6 @@ public class TokenVO implements Serializable {
     @ApiModelProperty("salt")
     private String salt;
     private Integer isBusinesses;
+    private Integer isProxy;
 
 }
