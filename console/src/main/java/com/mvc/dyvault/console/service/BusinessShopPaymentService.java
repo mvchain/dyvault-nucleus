@@ -64,4 +64,15 @@ public class BusinessShopPaymentService extends AbstractService<BusinessShopPaym
         }
     }
 
+    public PaymentDTO getPayment(BigInteger id, Integer paymentType) {
+        BusinessShopPayment payment = new BusinessShopPayment();
+        payment.setPaymentType(paymentType);
+        payment = findOneByEntity(payment);
+        if (null != payment) {
+            PaymentDTO result = new PaymentDTO();
+            BeanUtils.copyProperties(payment, result);
+            return result;
+        }
+        return null;
+    }
 }

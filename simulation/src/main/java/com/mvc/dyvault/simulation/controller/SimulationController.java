@@ -8,6 +8,7 @@ import com.mvc.dyvault.simulation.bean.Order;
 import com.mvc.dyvault.simulation.bean.SimulationDTO;
 import com.mvc.dyvault.simulation.bean.ToPayEntity;
 import com.mvc.dyvault.simulation.bean.ToPayResponse;
+import com.mvc.dyvault.simulation.service.JPushService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
@@ -18,7 +19,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +42,21 @@ public class SimulationController {
     @Autowired
     StringRedisTemplate redisTemplate;
     private static String url = "http://localhost:10079/order/build";
+    @Autowired
+    JPushService jPushService;
+
+
+    @GetMapping("total")
+    @ApiOperation("get total")
+    public Result<BigDecimal> getTotal(@RequestParam String uid) {
+        Map<Object, Object> set = redisTemplate.opsForHash().entries("SIMULATION_ORDER" + uid);
+        BigDecimal sum = set.values().stream().map(obj -> {
+            Order order = JSON.parseObject((String) obj, Order.class);
+            return order.getStatus() == 2 ? order.getCny() : BigDecimal.ZERO;
+
+        }).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return new Result<>(sum);
+    }
 
     @GetMapping
     @ApiOperation("get order list")
@@ -63,6 +81,14 @@ public class SimulationController {
         if (StringUtils.isNotBlank(jsonStr)) {
             Order order = JSON.parseObject(jsonStr, Order.class);
             order.setStatus(callbackDTO.getOrderStatus());
+            if (order.getStatus() == 2) {
+                HashMap<String, String> extra = new HashMap<>();
+                extra.put("type", "ORDER_STATUS");
+                extra.put("orderNumber", String.valueOf(order.getOrderNumber()));
+                extra.put("status", String.valueOf(2));
+                extra.put("cny", String.valueOf(order.getCny()));
+                jPushService.send("push message", extra, callbackDTO.getOrderNumber().split("#")[0]);
+            }
             redisTemplate.opsForHash().put("SIMULATION_ORDER" + callbackDTO.getOrderNumber().split("#")[0], callbackDTO.getOrderNumber(), JSON.toJSONString(order));
         }
         return new Result(true);

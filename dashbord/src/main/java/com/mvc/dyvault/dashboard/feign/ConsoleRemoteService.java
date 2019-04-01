@@ -178,7 +178,7 @@ public interface ConsoleRemoteService {
     Result<PageInfo<BusinessTransaction>> getSupplierTxList(@PathVariable("id") BigInteger id, @RequestBody BusinessTransactionSearchDTO businessTransactionSearchDTO);
 
     @GetMapping("dashboard/supplier/{id}/cancel")
-    Result<Boolean> cancelBusinessTx(@PathVariable("id") BigInteger id, @PathVariable("txId") BigInteger txId);
+    Result<Boolean> cancelBusinessTx(@PathVariable("id") BigInteger id, @RequestParam("txId") BigInteger txId);
 
     @GetMapping("dashboard/supplier/{id}/setting")
     Result<SupplierVO> getSupplier(@PathVariable("id") BigInteger id);
@@ -189,4 +189,6 @@ public interface ConsoleRemoteService {
     @PostMapping("dashboard/supplier/{id}")
     Result<Boolean> updatePayment(@PathVariable("id") BigInteger id, @RequestBody PaymentDTO paymentDTO);
 
+    @GetMapping("dashboard/supplier/{id}")
+    Result<PaymentDTO> getPayment(@PathVariable("id") BigInteger id, @RequestParam("paymentType") Integer paymentType);
 }

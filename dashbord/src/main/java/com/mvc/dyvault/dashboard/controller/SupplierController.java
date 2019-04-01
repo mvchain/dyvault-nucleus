@@ -33,6 +33,13 @@ public class SupplierController extends BaseController {
         return new Result<>(result);
     }
 
+    @ApiOperation("get payment setting")
+    @GetMapping("{id}")
+    public Result<PaymentDTO> getPayment(@PathVariable BigInteger id, @RequestParam("paymentType") Integer paymentType) {
+        PaymentDTO result = supplierService.getPayment(id, paymentType);
+        return new Result<>(result);
+    }
+
     @ApiOperation("update price differences")
     @PutMapping("{id}/setting")
     public Result<Boolean> updateSupplier(@PathVariable BigInteger id, @RequestBody SupplierVO supplierVO) {

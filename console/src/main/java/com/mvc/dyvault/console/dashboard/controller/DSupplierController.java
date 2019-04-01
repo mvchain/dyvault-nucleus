@@ -31,13 +31,13 @@ public class DSupplierController extends BaseController {
     BusinessTransactionService transactionService;
 
     @GetMapping("{id}/tx")
-    public Result<PageInfo<BusinessTransaction>> getSupplierTxList(@PathVariable("id") BigInteger id, @RequestBody BusinessTransactionSearchDTO businessTransactionSearchDTO) {
+    public Result<PageInfo<BusinessTransaction>> getSupplierTxList(@PathVariable("id") BigInteger id, @ModelAttribute BusinessTransactionSearchDTO businessTransactionSearchDTO) {
         PageInfo<BusinessTransaction> result = transactionService.getSupplierTxList(id, businessTransactionSearchDTO);
         return new Result<>(result);
     }
 
     @GetMapping("{id}/cancel")
-    public Result<Boolean> cancelBusinessTx(@PathVariable("id") BigInteger id, @PathVariable("txId") BigInteger txId) {
+    public Result<Boolean> cancelBusinessTx(@PathVariable("id") BigInteger id, @RequestParam("txId") BigInteger txId) {
         Boolean result = transactionService.cancel(id, txId);
         return new Result<>(result);
     }
@@ -57,6 +57,12 @@ public class DSupplierController extends BaseController {
     @PostMapping("{id}")
     public Result<Boolean> updatePayment(@PathVariable("id") BigInteger id, @RequestBody PaymentDTO paymentDTO) {
         Boolean result = paymentService.updatePayment(id, paymentDTO);
+        return new Result<>(result);
+    }
+
+    @GetMapping("{id}")
+    public Result<PaymentDTO> getPayment(@PathVariable("id") BigInteger id, @RequestParam("paymentType") Integer paymentType) {
+        PaymentDTO result = paymentService.getPayment(id, paymentType);
         return new Result<>(result);
     }
 

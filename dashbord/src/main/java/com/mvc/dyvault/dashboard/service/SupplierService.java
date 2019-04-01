@@ -44,4 +44,8 @@ public class SupplierService extends BaseService {
         return result.getData();
     }
 
+    public PaymentDTO getPayment(BigInteger id, Integer paymentType) {
+        Result<PaymentDTO> result = remoteService.getPayment(id, paymentType);
+        return result.getData();
+    }
 }
