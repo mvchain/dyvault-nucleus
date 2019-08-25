@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 /**
  * @author qiyichen
  * @create 2019/3/28 17:26
+ --
+ The Dyvault project modified the way the node obtained the external network address.
  */
 @Component
 public class NotifyJob implements CommandLineRunner {
